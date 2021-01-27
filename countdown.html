@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>count down | Sanjay Goraniya</title>
+    <link rel="icon" sizes="256x256" href="/favicon.ico">
+    <style>
+        /* counter css */
+        :root {
+            --main-background: rgb(6, 10, 31);
+            --pink: hsl(207, 100%, 50%);
+            --time-box-background-primary: hsl(207, 90%, 54%); /* blue light */
+            --time-box-background-secondary: hsl(207, 84%, 45%); /* blue dark */
+            --pink: hsl(335, 100%, 50%);
+            --sec-box-background-primary: hsl(335, 90%, 54%); /* pink light */
+            --sec-box-background-secondary: hsl(335, 84%, 45%); /* pink dark */
+
+        }
+        *, *::after, *::before {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Open Sans', sans-serif;
+        }
+        body { background: var(--main-background) }
+        .time div span { background: var(--time-box-background-primary) }
+        .time div span:nth-child(2) { background: var(--time-box-background-secondary) }
+        .time div:last-child span { background: var(--sec-box-background-primary) }
+        .time div:last-child span:nth-child(2) { background: var(--sec-box-background-secondary) }
+
+        /* ********** utility css ********** */
+        .outline-none,
+        .outline-none:hover,
+        .outline-none:active,
+        .outline-none:focus { outline: none }
+        .cursor-pointer { cursor: pointer }
+        .block { display: block }
+        .flex { display: flex }
+        .justify-center { justify-content: center }
+        .justify-evenly	{ justify-content: space-evenly }
+        .flex-row { flex-direction: row }
+        .flex-col { flex-direction: column }
+        .items-center { align-items: center }
+        .flex-wrap { flex-wrap: wrap }
+        .flex-nowrap { flex-wrap: nowrap }
+        .flex-shrink-1 { flex-shrink: 1 }
+        .text-center { text-align: center }
+        .text-white { color: #fff }
+        .uppercase { text-transform: uppercase }
+        .normal-case { text-transform: none }
+        .select-none { user-select: none }
+        .relative { position: relative }
+        .border-none { border-style: none }
+        .shadow-none { box-shadow: none }
+        .tracking-widest { letter-spacing: 0.1em }
+        .font-light { font-weight: 300 }
+        .font-bold { font-weight: 700 }
+
+        /* box-shadow */
+        .shadow-sm { box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.4) }
+        
+        /* max-width */
+        .max-w-full { max-width: 100% }
+
+        /* width */
+        .w-24 { width: 6rem }
+        .w-1\/2 { width: 50% }
+        .w-full { width: 100% }
+
+        /* min-height */
+        .min-h-screen { min-height: 100vh }
+        .min-h-60 { min-height: 15rem }
+
+        /* height */
+        .h-screen { height: 100vh }
+        .h-7 { height: 1.75rem }
+        .h-10 { height: 2.5rem }
+        .h-16 { height: 4rem }
+        .h-1\/2 { height: 50% }
+
+        /* font-size */
+        .text-sm { font-size: 0.875rem; line-height: 1.25rem }
+        .text-3xl { font-size: 1.875rem; line-height: 2.25rem }
+        .text-5xl { font-size: 3rem; line-height: 1 }
+
+        /* margin */
+        .m-0 { margin: 0px }
+        .m-0\.5 { margin: 0.125rem }
+        .m-1 { margin: 0.25rem }
+        .mt-5 { margin-top: 1.25rem }
+        .mt-20 { margin-top: 5rem }
+        .mx-2\.5 { margin-top: 0.625rem; margin-bottom: 0.625rem}
+
+        /* padding */
+        .p-0 { padding: 0px }
+        .p-0\.5 { padding: 0.125rem }
+        .p-1 { padding: 0.25rem }
+        .p-5 { padding: 1.25rem }
+        .px-2\.5 { padding-left: 0.625rem; padding-right: 0.625rem }
+        .px-5 { padding-left: 1.25rem; padding-right: 1.25rem }
+        .py-0\.5 { padding-top: 0.125rem; padding-bottom: 0.125rem }
+        .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem }
+        .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem }
+        
+        /* border-radius */
+        .rounded-full { border-radius: 9999px }
+
+        /* z-index */
+        .z-10 { z-index: 10 }
+        .z-20 { z-index: 20 }
+
+        /* browser */
+        .webkit-reflect { -webkit-box-reflect: below 1px linear-gradient(transparent, #0004) }
+        /* ********** utility css ********** */
+
+        @media (max-width: 550px) {
+            .md\:webkit-reflect-none { -webkit-box-reflect: unset }
+            .md\:mt-3\.5 { margin-top: 0.875rem }
+            .md\:block { display: block }
+            .md\:px-10 { padding-left: 2.5rem; padding-right: 2.5rem }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex justify-center flex-col items-center text-white">
+    <div>
+        <h2 class="block text-center font-bold normal-case mx-2.5 text-3xl" id="title"></h2>
+        <h6 class="block text-center font-bold tracking-widest uppercase" id="status">Time left</h6>
+        <div class="flex items-center justify-center flex-row flex-wrap time webkit-reflect md:webkit-reflect-none md:px-10">
+            <div class="select-none relative m-1">
+                <span class="flex items-center flex-row justify-center relative font-light w-24 h-16 text-5xl z-20 shadow-sm" id="days">00</span>
+                <span class="flex items-center flex-row justify-center relative font-light w-24 h-7 text-sm z-10 uppercase shadow-none tracking-widest">Days</span>
+            </div>
+            <div class="select-none relative m-1">
+                <span class="flex items-center flex-row justify-center relative font-light w-24 h-16 text-5xl z-20 shadow-sm" id="hours">00</span>
+                <span class="flex items-center flex-row justify-center relative font-light w-24 h-7 text-sm z-10 uppercase shadow-none tracking-widest">Hours</span>
+            </div>
+            <div class="select-none relative m-1">
+                <span class="flex items-center flex-row justify-center relative font-light w-24 h-16 text-5xl z-20 shadow-sm" id="minutes">00</span>
+                <span class="flex items-center flex-row justify-center relative font-light w-24 h-7 text-sm z-10 uppercase shadow-none tracking-widest">Minutes</span>
+            </div>
+            <div class="select-none relative m-1">
+                <span class="flex items-center flex-row justify-center relative font-light w-24 h-16 text-5xl z-20 shadow-sm" id="seconds">00</span>
+                <span class="flex items-center flex-row justify-center relative font-light w-24 h-7 text-sm z-10 uppercase shadow-none tracking-widest">Seconds</span>
+            </div>
+        </div>
+    </div>
+    <div class="max-w-full h-1/2 p-1 mt-20 md:mt-3.5 min-h-60 flex items-center justify-center md:block">
+        <div class="flex flex-col justify-center" id="new__date">
+            <!-- <div class="flex flex-col mt-5">
+                <label class="px-2.5 py-0.5" for="updatedTime">Select time</label>
+                <input class="w-full outline-none border-none h-10 rounded-full py-1.5 px-5" id="updatedTime" type="datetime-local" min="01/26/2021, 18:01" />
+            </div>
+            <div class="flex flex-col mt-5">
+                <label class="px-2.5 py-0.5" for="updatedMsg">Event Msg</label>
+                <input class="w-full outline-none border-none h-10 rounded-full py-1.5 px-5" id="updatedMsg" type="text" />
+            </div>
+            <div class="flex justify-evenly flex-wrap mt-5">
+                <button class="outline-none border-none h-10 rounded-full py-1.5 px-5 cursor-pointer m-1" onclick="handleUpdateEvent()">Submit</button>
+                <button class="outline-none border-none h-10 rounded-full py-1.5 px-5 cursor-pointer m-1" onclick="handleFormCancel()">Cancel</button>
+            </div> -->
+            <div class="flex justify-evenly flex-wrap mt-5">
+                <button class="outline-none border-none h-10 rounded-full py-1.5 px-5 cursor-pointer m-1" onclick="handleGetUpdateEventForm()">Add new Event</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var clear;
+    const byId = (i) => document.getElementById(i);
+    const byQS = (q, h) => document.querySelector(q).innerHTML = h;
+    const fillTime = (t) => t.toLocaleString().length == 1 ? '0' + t : t;
+    const render = (days, hours, minutes, seconds) => { let a = { days, hours, minutes, seconds }; return Object.keys(a).forEach((value, index) => byId(value).innerHTML = fillTime(a[value])); }
+    const title = byId("title");
+    const status = byId('status');
+    const initCounter = ({ eventDate, eventTitle }) => {
+        let displayDate = new Date(eventDate).toLocaleString()
+        title.innerText = eventTitle || "Event counter";
+        status.style.color = "yellow";
+        
+        status.innerHTML = `TIME LEFT <span class="text-white"> : ${displayDate}</span>`;
+        var c = setInterval(async () => {
+            let cd = new Date(eventDate).getTime(),
+                now = new Date().getTime(),
+                diff = cd - now,
+                d = Math.floor(diff / (1000 * 60 * 60 * 24)),
+                h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+                s = Math.floor((diff % (1000 * 60)) / 1000);
+            if (diff < 0) {
+                clearInterval(c);
+                render("00", "00", "00", "00");
+                status.style.color = "red";
+                status.innerHTML = `COMPLETED <span class="text-white"> : ${displayDate}</span>`;
+                return true;
+            }
+            return render(d, h, m, s);
+        }, 1000);
+
+        return () => clearInterval(c);
+    }
+    const handleUpdateEvent = () => {
+        let time = byId("updatedTime").value, msg = byId("updatedMsg").value;
+        if (time && msg) {
+            clear && clear();
+            localStorage.setItem("event", JSON.stringify({ eventDate: time, eventTitle: msg }));
+            clear = initCounter({ eventDate: time, eventTitle: msg });
+        } else {
+            alert("Invalid information !");
+        }
+    }
+    const handleFormCancel = () => {
+        byQS("#new__date", `<div class="flex justify-evenly flex-wrap mt-5">
+                <button class="outline-none border-none h-10 rounded-full py-1.5 px-5 cursor-pointer m-1" onclick="handleGetUpdateEventForm()">Add new Event</button>
+            </div>`);
+    }
+    const handleGetUpdateEventForm = () => {
+        byQS("#new__date", `<div class="flex flex-col mt-5">
+                <label class="px-2.5 py-0.5" for="updatedTime">Select time</label>
+                <input class="w-full outline-none border-none h-10 rounded-full py-1.5 px-5" id="updatedTime" type="datetime-local" min="01/26/2021, 18:01" />
+            </div>
+            <div class="flex flex-col mt-5">
+                <label class="px-2.5 py-0.5" for="updatedMsg">Event Msg</label>
+                <input class="w-full outline-none border-none h-10 rounded-full py-1.5 px-5" id="updatedMsg" type="text" />
+            </div>
+            <div class="flex justify-evenly flex-wrap mt-5">
+                <button class="outline-none border-none h-10 rounded-full py-1.5 px-5 cursor-pointer m-1" onclick="handleUpdateEvent()">Submit</button>
+                <button class="outline-none border-none h-10 rounded-full py-1.5 px-5 cursor-pointer m-1" onclick="handleFormCancel()">Cancel</button>
+            </div>`);
+    }
+    var eventData = JSON.parse(localStorage.getItem("event"));
+    if (eventData) {
+        // clear = initCounter({ eventDate: "April 25, 2021 23:59:59", eventTitle: "My Event" });
+        clear = initCounter(eventData);
+    } else {
+        title.innerText = "Please add new event.";
+        handleGetUpdateEventForm();
+    }
+</script>
+</html>
