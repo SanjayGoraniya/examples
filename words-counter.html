@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Words & Characters Counter | Sanjay Goraniya</title>
+    <style>
+        :root {
+            --dark-navy: #09162A;
+            --navy: #0A192F;
+            --blue: #007BFF;
+            --white: #FFFFFF;
+            --black-24: rgba(0, 0, 0, 0.24);
+            --black-30: rgba(0, 0, 0, 0.30);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            padding: 20px 40px;
+            background: var(--navy);
+            color: var(--white);
+            font-family: Consolas, "Courier New", monospace;
+        }
+
+        .app {
+            min-width: 330px;
+        }
+
+        #txt {
+            width: 100%;
+            min-height: 210px;
+            font-size: 1rem;
+            padding: 5px;
+            padding-top: 19px;
+            position: relative;
+            overflow: hidden;
+            border-width: 2px;
+            border-style: solid;
+            border-color: var(--blue);
+            outline: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #txt::before {
+            content: attr(data-count);
+            user-select: auto;
+            display: flex;
+            width: 100%;
+            margin-left: -5px;
+            margin-top: -19px;
+            padding: 0 5px;
+            background: var(--blue);
+        }
+
+        #txt:active,
+        #txt:focus,
+        #txt:hover {
+            outline: none;
+            background: var(--dark-navy);
+            box-shadow: 0 19px 38px var(--black-30), 0 15px 12px var(--black-24);
+            /* border-color: #1a73e8; */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <h1>Words & Characters Counter</h1>
+        <div id="txt" contenteditable="true" tabindex="0" data-count="* words | * characters" spellcheck="false">Hello.
+        </div>
+    </div>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script type="text/javascript" defer>
+        // Helper functions
+        const doc = document;
+        const count = (e) => {
+            const c = e.innerText, k = 'length', w = c.split(/[\n\r\s]+/g).filter((_) => _[k] > 0);
+            e.dataset.count = `${w[k]} Words | ${c[k]} Characters`;
+        }
+
+        // Variables
+        const txt = doc.getElementById('txt');
+
+        // Event handler functions
+        const init = () => (count(txt), txt.focus());
+        const handleKey = () => count(txt);
+        const handlePaste = (e) => {
+            e.preventDefault(); doc.execCommand("insertHTML", false, (e.originalEvent || e).clipboardData.getData("text/plain"))
+        }
+
+        // Events
+        txt.onkeyup = handleKey;
+        txt.onkeydown = handleKey;
+        txt.onpaste = handlePaste;
+        doc.body.onload = init;
+// or doc.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>
