@@ -538,7 +538,7 @@
             }
 
             setup() {
-                let eventElem = this.querySelector('#events');
+                let eventElem = this.querySelector('#events-list');
                 this.events.forEach(({ eventTitle, eventDate }, index) => {
                     eventDate = new Date(eventDate).toLocaleString();
                     let div = document.createElement('div');
@@ -570,7 +570,7 @@
             render() {
                 this.innerHTML = `
                     <h1 class="block text-center font-bold normal-case mx-2.5 text-3xl">Select event to start countdown</h1>
-                    <div id="events"></div>
+                    <div id="events-list"></div>
                 `;
             }
         }
