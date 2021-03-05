@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Event Countdown | Sanjay Goraniya</title>
+    <style>
+        /* counter css */
+
+        :root {
+            /* --main-background: rgb(6, 10, 31); */
+            --main-background: #0a192f;
+            --pink: hsl(207, 100%, 50%);
+            --time-box-background-primary: hsl(207, 90%, 54%);
+            /* blue light */
+            --time-box-background-secondary: hsl(207, 84%, 45%);
+            /* blue dark */
+            --pink: hsl(335, 100%, 50%);
+            --sec-box-background-primary: hsl(335, 90%, 54%);
+            /* pink light */
+            --sec-box-background-secondary: hsl(335, 84%, 45%);
+            /* pink dark */
+        }
+
+        *,
+        *::after,
+        *::before {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        body {
+            background: var(--main-background)
+        }
+
+        .time div span {
+            background: var(--time-box-background-primary)
+        }
+
+        .time div span:nth-child(2) {
+            background: var(--time-box-background-secondary)
+        }
+
+        .time div:last-child span {
+            background: var(--sec-box-background-primary)
+        }
+
+        .time div:last-child span:nth-child(2) {
+            background: var(--sec-box-background-secondary)
+        }
+
+        /* ********** utility css ********** */
+
+        .outline-none,
+        .outline-none:hover,
+        .outline-none:active,
+        .outline-none:focus {
+            outline: none
+        }
+
+        .hover\:bg-yellow-400:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgba(251, 191, 36, var(--tw-bg-opacity));
+        }
+
+        .text-yellow-400 {
+            --tw-color-opacity: 1;
+            color: rgba(251, 191, 36, var(--tw-color-opacity));
+        }
+
+        .hover\:text-white:hover {
+            color: #fff
+        }
+
+        .text-white {
+            color: #fff
+        }
+
+        .text-current {
+            color: currentColor
+        }
+
+        .list-none {
+            list-style-type: none
+        }
+
+        .cursor-pointer {
+            cursor: pointer
+        }
+
+        .block {
+            display: block
+        }
+
+        .flex {
+            display: flex
+        }
+
+        .justify-center {
+            justify-content: center
+        }
+
+        .justify-evenly {
+            justify-content: space-evenly
+        }
+
+        .flex-row {
+            flex-direction: row
+        }
+
+        .flex-col {
+            flex-direction: column
+        }
+
+        .items-center {
+            align-items: center
+        }
+
+        .flex-wrap {
+            flex-wrap: wrap
+        }
+
+        .flex-nowrap {
+            flex-wrap: nowrap
+        }
+
+        .flex-shrink-1 {
+            flex-shrink: 1
+        }
+
+        .text-center {
+            text-align: center
+        }
+
+        .uppercase {
+            text-transform: uppercase
+        }
+
+        .normal-case {
+            text-transform: none
+        }
+
+        .no-underline {
+            text-decoration: none
+        }
+
+        .select-none {
+            user-select: none
+        }
+
+        .relative {
+            position: relative
+        }
+
+        .border-none {
+            border-style: none
+        }
+
+        .shadow-none {
+            box-shadow: none
+        }
+
+        .tracking-widest {
+            letter-spacing: 0.1em
+        }
+
+        .font-light {
+            font-weight: 300
+        }
+
+        .font-bold {
+            font-weight: 700
+        }
+
+        /* box-shadow */
+
+        .shadow-sm {
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.4)
+        }
+
+        /* max-width */
+
+        .max-w-full {
+            max-width: 100%
+        }
+
+        /* width */
+
+        .w-24 {
+            width: 6rem
+        }
+
+        .w-1\/2 {
+            width: 50%
+        }
+
+        .w-full {
+            width: 100%
+        }
+
+        /* min-height */
+
+        .min-h-screen {
+            min-height: 100vh
+        }
+
+        .min-h-60 {
+            min-height: 15rem
+        }
+
+        /* height */
+
+        .h-screen {
+            height: 100vh
+        }
+
+        .h-full {
+            height: 100%;
+        }
+
+        .h-7 {
+            height: 1.75rem
+        }
+
+        .h-10 {
+            height: 2.5rem
+        }
+
+        .h-16 {
+            height: 4rem
+        }
+
+        .h-24 {
+            height: 6rem
+        }
+
+        .h-1\/2 {
+            height: 50%
+        }
+
+        /* font-size */
+
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem
+        }
+
+        .text-3xl {
+            font-size: 1.875rem;
+            line-height: 2.25rem
+        }
+
+        .text-5xl {
+            font-size: 3rem;
+            line-height: 1
+        }
+
+        /* margin */
+
+        .m-0 {
+            margin: 0px
+        }
+
+        .m-0\.5 {
+            margin: 0.125rem
+        }
+
+        .m-1 {
+            margin: 0.25rem
+        }
+
+        .mt-5 {
+            margin-top: 1.25rem
+        }
+
+        .mt-20 {
+            margin-top: 5rem
+        }
+
+        .mx-2\.5 {
+            margin-top: 0.625rem;
+            margin-bottom: 0.625rem
+        }
+
+        /* padding */
+
+        .p-0 {
+            padding: 0px
+        }
+
+        .p-0\.5 {
+            padding: 0.125rem
+        }
+
+        .p-1 {
+            padding: 0.25rem
+        }
+
+        .p-5 {
+            padding: 1.25rem
+        }
+
+        .px-2\.5 {
+            padding-left: 0.625rem;
+            padding-right: 0.625rem
+        }
+
+        .px-5 {
+            padding-left: 1.25rem;
+            padding-right: 1.25rem
+        }
+
+        .py-0\.5 {
+            padding-top: 0.125rem;
+            padding-bottom: 0.125rem
+        }
+
+        .py-1 {
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem
+        }
+
+        .py-1\.5 {
+            padding-top: 0.375rem;
+            padding-bottom: 0.375rem
+        }
+
+        /* border-radius */
+
+        .rounded-none {
+            border-radius: 0px
+        }
+
+        .rounded-sm {
+            border-radius: 0.125rem
+        }
+
+        .rounded {
+            border-radius: 0.25rem
+        }
+
+        .rounded-md {
+            border-radius: 0.375rem
+        }
+
+        .rounded-lg {
+            border-radius: 0.5rem
+        }
+
+        .rounded-xl {
+            border-radius: 0.75rem
+        }
+
+        .rounded-2xl {
+            border-radius: 1rem
+        }
+
+        .rounded-3xl {
+            border-radius: 1.5rem
+        }
+
+        .rounded-full {
+            border-radius: 9999px
+        }
+
+        /* z-index */
+
+        .z-10 {
+            z-index: 10
+        }
+
+        .z-20 {
+            z-index: 20
+        }
+
+        /* browser */
+
+        .webkit-reflect {
+            -webkit-box-reflect: below 1px linear-gradient(transparent, #0004)
+        }
+
+        /* ********** utility css ********** */
+
+        @media (max-width: 550px) {
+            .md\:webkit-reflect-none {
+                -webkit-box-reflect: unset
+            }
+
+            .md\:mt-3\.5 {
+                margin-top: 0.875rem
+            }
+
+            .md\:block {
+                display: block
+            }
+
+            .md\:px-10 {
+                padding-left: 2.5rem;
+                padding-right: 2.5rem
+            }
+        }
+
+        .box\-box {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            /* border: 5px solid gray; */
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+    <event-menu></event-menu>
+    <div id="app" class="flex justify-center flex-col items-center text-white">
+        <add-event></add-event>
+    </div>
+    <script>
+        const innerHTML = (s) => {
+            document.querySelector("#app").innerHTML = s;
+        }
+        const showEvents = () => {
+            innerHTML('<events-list></events-list>');
+        }
+        const showCounter = () => {
+            innerHTML('<event-counter></event-counter>')
+        }
+        const showForm = () => {
+            innerHTML('<add-event></add-event>')
+        }
+        const init = () => {
+            let hash = window.location.hash.substr(1);
+            if (hash === 'current' && JSON.parse(localStorage.getItem('event'))) {
+                showCounter();
+            } else if (hash === 'events' && JSON.parse(localStorage.getItem('events'))) {
+                showEvents();
+            } else {
+                showForm();
+            }
+        }
+    </script>
+    <script>
+        class AddEvent extends HTMLElement {
+            constructor() {
+                super();
+                // this.shadow = this.attachShadow({ mode: 'open' });
+                this.events = JSON.parse(localStorage.getItem('events'));
+                // this.setup.bind(this);
+            }
+            get count() {
+                return this.getAttribute('count');
+            }
+            set count(val) {
+                this.setAttribute('count', val);
+            }
+            static get observedAttributes() {
+                return ['count'];
+            }
+            setup() {
+                let submit = this.querySelector('#submit');
+                submit.addEventListener('click', this.submit.bind(this));
+
+                let cancel = this.querySelector('#cancel');
+                cancel.addEventListener('click', this.cancel.bind(this));
+            }
+
+            cancel() {
+                alert('cancel the form');
+            }
+
+            submit() {
+                let time = this.querySelector("#updatedTime").value, msg = this.querySelector("#updatedMsg").value;
+                if (time && msg) {
+                    if (!this.events) {
+                        this.events = [];
+                    }
+                    this.events = [...this.events, { eventDate: time, eventTitle: msg }];
+                    localStorage.setItem("events", JSON.stringify(this.events));
+                    console.log(this.events)
+                    showEvents();
+                    // clear = initCounter({ eventDate: time, eventTitle: msg });
+                } else {
+                    alert("Invalid information !");
+                }
+            }
+
+            attributeChangedCallback(prop, oldVal, newVal) {
+                if (prop === 'count') {
+                    this.render();
+                    this.setup();
+                }
+            }
+            connectedCallback() {
+                this.render();
+                this.setup();
+            }
+            render() {
+                this.innerHTML = `
+                    <div class="flex flex-col mt-5">
+                        <label class="px-2.5 py-0.5" for="updatedTime">Select time</label>
+                        <input class="w-full outline-none border-none h-10 rounded-full py-1.5 px-5" id="updatedTime" type="datetime-local" min="01/26/2021, 18:01" />
+                    </div>
+                    <div class="flex flex-col mt-5">
+                        <label class="px-2.5 py-0.5" for="updatedMsg">Event Msg</label>
+                        <input class="w-full outline-none border-none h-10 rounded-full py-1.5 px-5" id="updatedMsg" type="text" />
+                    </div>
+                    <div class="flex justify-evenly flex-wrap mt-5">
+                        <button id="submit" class="outline-none border-none h-10 rounded-full py-1.5 px-5 cursor-pointer m-1">Submit</button>
+                        <button id="cancel" class="outline-none border-none h-10 rounded-full py-1.5 px-5 cursor-pointer m-1">Cancel</button>
+                    </div>
+                `;
+            }
+        }
+        customElements.define('add-event', AddEvent);
+
+    </script>
+    <script>
+        class EventsList extends HTMLElement {
+            constructor() {
+                super();
+                this.events = JSON.parse(localStorage.getItem('events'));
+                this.setup.bind(this);
+            }
+            get count() {
+                return this.getAttribute('count');
+            }
+            set count(val) {
+                this.setAttribute('count', val);
+            }
+            static get observedAttributes() {
+                return ['count'];
+            }
+
+            startEvent(event) {
+                showTimer();
+                localStorage.setItem("event", JSON.stringify(event));
+            }
+
+            setup() {
+                let eventElem = this.querySelector('#events');
+                this.events.forEach(({ eventTitle, eventDate }, index) => {
+                    eventDate = new Date(eventDate).toLocaleString();
+                    let div = document.createElement('div');
+                    div.classList = 'flex flex-col mx-2.5 cursor-pointer rounded-lg box-box p-5';
+                    div.id = eventTitle;
+                    div.onclick = () => {
+                        localStorage.setItem('event', JSON.stringify({ eventTitle, eventDate }));
+                        showCounter();
+                    }
+                    div.innerHTML = `
+                        <h2 class="py-1">${eventTitle}</h2>
+                        <h5 class="block font-bold tracking-widest uppercase text-white">${eventDate}</h5>
+                    `
+                    eventElem.append(div);
+                });
+            }
+
+            attributeChangedCallback(prop, oldVal, newVal) {
+                if (prop === 'count') {
+                    this.render();
+                    this.setup();
+                }
+            }
+            connectedCallback() {
+                this.render();
+                this.setup();
+            }
+
+            render() {
+                this.innerHTML = `
+                    <h1 class="block text-center font-bold normal-case mx-2.5 text-3xl">Select event to start countdown</h1>
+                    <div id="events"></div>
+                `;
+            }
+        }
+        customElements.define('events-list', EventsList);
+
+    </script>
+    <script>
+        class EventCounter extends HTMLElement {
+            constructor() {
+                super();
+                this.event = JSON.parse(localStorage.getItem("event"));
+            }
+
+            fillTime(t) {
+                return t.toLocaleString().length == 1 ? '0' + t : t
+            }
+
+            renderTime(days, hours, minutes, seconds) {
+                let a = { days, hours, minutes, seconds };
+                const callback = (value, index) => this.querySelector(`#${value}`).innerHTML = this.fillTime(a[value]);
+                return Object.keys(a).forEach(callback.bind(this));
+            }
+
+            initCounter({ eventDate, eventTitle }) {
+                let title = this.querySelector('#title');
+                let status = this.querySelector('#status');
+                let displayDate = new Date(eventDate).toLocaleString();
+                title.innerText = eventTitle || "Event counter";
+                status.style.color = "yellow";
+                status.innerHTML = `TIME LEFT <span class="text-white"> : ${displayDate}</span>`;
+                var c = setInterval(async () => {
+                    let cd = new Date(eventDate).getTime(),
+                        now = new Date().getTime(),
+                        diff = cd - now,
+                        d = Math.floor(diff / (1000 * 60 * 60 * 24)),
+                        h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                        m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+                        s = Math.floor((diff % (1000 * 60)) / 1000);
+                    if (diff < 0) {
+                        clearInterval(c);
+                        this.renderTime("00", "00", "00", "00");
+                        status.style.color = "red";
+                        status.innerHTML = `COMPLETED <span class="text-white"> : ${displayDate}</span>`;
+                        return true;
+                    }
+                    return this.renderTime(d, h, m, s);
+                }, 1000);
+
+                return () => clearInterval(c);
+            }
+
+            disconnectedCallback() {
+                this.counter && this.counter();
+            }
+
+            connectedCallback() {
+                this.render();
+                this.counter = this.initCounter(this.event);
+            }
+
+            render() {
+                this.innerHTML = `
+                    <div id="timer">
+                        <h2 class="block text-center font-bold normal-case mx-2.5 text-3xl" id="title">Event name</h2>
+                        <h6 class="block text-center font-bold tracking-widest uppercase" id="status" style="color: yellow;">TIME LEFT <span class="text-white"> : 8/1/2021, 12:00:00 AM</span></h6>
+                        <div class="flex items-center justify-center flex-row flex-wrap time webkit-reflect md:webkit-reflect-none md:px-10">
+                            <div class="select-none relative m-1">
+                                <span class="flex items-center flex-row justify-center relative font-light w-24 h-16 text-5xl z-20 shadow-sm" id="days">00</span>
+                                <span class="flex items-center flex-row justify-center relative font-light w-24 h-7 text-sm z-10 uppercase shadow-none tracking-widest">Days</span>
+                            </div>
+                            <div class="select-none relative m-1">
+                                <span class="flex items-center flex-row justify-center relative font-light w-24 h-16 text-5xl z-20 shadow-sm" id="hours">00</span>
+                                <span class="flex items-center flex-row justify-center relative font-light w-24 h-7 text-sm z-10 uppercase shadow-none tracking-widest">Hours</span>
+                            </div>
+                            <div class="select-none relative m-1">
+                                <span class="flex items-center flex-row justify-center relative font-light w-24 h-16 text-5xl z-20 shadow-sm" id="minutes">00</span>
+                                <span class="flex items-center flex-row justify-center relative font-light w-24 h-7 text-sm z-10 uppercase shadow-none tracking-widest">Minutes</span>
+                            </div>
+                            <div class="select-none relative m-1">
+                                <span class="flex items-center flex-row justify-center relative font-light w-24 h-16 text-5xl z-20 shadow-sm" id="seconds">00</span>
+                                <span class="flex items-center flex-row justify-center relative font-light w-24 h-7 text-sm z-10 uppercase shadow-none tracking-widest">Seconds</span>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }
+        }
+
+        customElements.define('event-counter', EventCounter);
+    </script>
+    <script>
+        class EventMenu extends HTMLElement {
+            constructor() {
+                super();
+                this.innerHTML = `
+                    <header class="h-24 flex justify-center flex-col items-center text-white">
+                        <ul class="flex flex-row">
+                            <li class="list-none">
+                                <a href="#create" onclick="showForm()" class="no-underline m-1 p-5 rounded-full hover:bg-yellow-400 text-yellow-400 hover:text-white w-full h-full">Create</a>
+                            </li>
+                            <li class="list-none">
+                                <a href="#current" onclick="showCounter()" class="no-underline m-1 p-5 rounded-full hover:bg-yellow-400 text-yellow-400 hover:text-white w-full h-full">Current</a>
+                            </li>
+                            <li class="list-none">
+                                <a href="#events" onclick="showEvents()" class="no-underline m-1 p-5 rounded-full hover:bg-yellow-400 text-yellow-400 hover:text-white w-full h-full">Events</a>
+                            </li>
+                        </ul>
+                    </header>
+                `;
+            }
+        }
+        customElements.define('event-menu', EventMenu);
+    </script>
+</body>
+
+</html>
