@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Percentage Calculator | Sanjay Goraniya</title>
+    <style>
+        * {margin: 0;padding: 0;box-sizing: border-box}
+        body{height: 100%;min-height: 100vh;width: 100%;user-select: none}
+        .container{padding: 5rem 0;height: 100%;width: 100%;display: flex;flex-direction: column;justify-content: center;align-items: center}
+        input{padding: 5px;outline-color: #0275d8;outline-width: 1rem}
+        #pr{width:80px}
+        #num{width:100px}
+        .btn{--btn-bg-color:#0275d8;box-sizing:border-box;appearance:none;background-color:transparent;border:2px solid var(--btn-bg-color);border-radius:0.6em;color:var(--btn-bg-color);cursor:pointer;display:flex;align-self:center;font-weight:400;line-height:1;margin-top:2rem;padding:1.2em 2.8em;text-decoration:none;text-align:center;text-transform:uppercase;font-weight:700;transition:box-shadow 300ms ease-in-out,color 300ms ease-in-out;outline:none}
+        .btn:hover,.btn:focus{color:#fff;outline:none}
+        .btn:hover { box-shadow: 0 0 40px 40px var(--btn-bg-color) inset }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <span>
+            <input id="pr" type="number" step=".1"> % of
+            <input id="num" type="number" step="10"> is
+            <strong id="result"></strong>
+        </span>
+        <button class="btn" id="calcBtn">calculate</button>
+    </div>
+    <script>
+        const byId = (id) => document.getElementById(id), prEl = byId('pr'), numEl = byId('num'), resultEl = byId('result'), calcBtnEl = byId('calcBtn');
+        prEl.addEventListener('input', calculate);
+        numEl.addEventListener('input', calculate);
+        calcBtnEl.addEventListener('click', calculate);
+        function calculate() {
+            let num = numEl.value, pr = prEl.value;
+            if (num && pr) {
+                // m1 = ((pr / 100) * num).toFixed(2);
+                m2 = (num * pr / 100).toFixed(2);
+                resultEl.innerText = m2;
+            } else {
+                resultEl.innerText = '';
+            }
+        }
+        numEl.value = 100;
+        prEl.value = 10;
+    </script>
+</body>
+
+</html>
