@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Toggle Theme | Sanjay Goraniya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        body {
+            -webkit-transition: background-color 0.5s ease;
+            transition: background-color 0.5s ease;
+            height: 100vh;
+            width: 100vw;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            background-color: #f7f7f7;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        body h2 {
+            padding: 10px 0;
+        }
+        body.night {
+            background-color: #1e1e30;
+        }
+        body.night h2 {
+            color: white;
+        }
+        .toggle-theme-wrapper {
+            --toggle-switch-size: 30px;
+            height: var(--toggle-switch-size);
+            width: var(--toggle-switch-size);
+            border-radius: 50%;
+            position: absolute;
+            top: 20px;
+            right: 30px;
+        }
+        .toggle-theme-wrapper #toggle-switch {
+            visibility: hidden;
+            position: absolute;
+            opacity: 0;
+            height: 0;
+            width: 0;
+        }
+        .toggle-theme-wrapper #toggle-switch:checked+label .sun {
+            -webkit-transition: all 2s ease;
+            transition: all 2s ease;
+            display: block;
+            opacity: 1;
+        }
+        .toggle-theme-wrapper #toggle-switch:checked+label .moon {
+            -webkit-transition: all 2s ease;
+            transition: all 2s ease;
+            display: none;
+            opacity: 0;
+        }
+        .toggle-theme-wrapper label {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .toggle-theme-wrapper label:hover {
+            -webkit-transform-origin: center;
+            transform-origin: center;
+            -webkit-transform: scale(1.2);
+            transform: scale(1.2);
+        }
+        .toggle-theme-wrapper label svg.sun {
+            height: calc(var(--toggle-switch-size) * 0.7);
+            width: calc(var(--toggle-switch-size) * 0.7);
+        }
+        .toggle-theme-wrapper label svg.moon {
+            height: calc(var(--toggle-switch-size) * 0.9);
+            width: calc(var(--toggle-switch-size) * 0.9);
+        }
+        .toggle-theme-wrapper label .sun {
+            display: none;
+        }
+        .toggle-theme-wrapper label .moon {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Toggle Theme</h2>
+    <div class="toggle-theme-wrapper">
+        <input id="toggle-switch" type="checkbox" />
+        <label for="toggle-switch">
+            <svg class="sun" height="22" width="22" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                stroke="#FDB813" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" fill="none" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg class="moon" height="26" width="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" />
+            </svg>
+        </label>
+    </div>
+
+    <script type="text/javascript">
+        const toggleSwitch = document.querySelector("input#toggle-switch");
+        const hours = new Date().getHours();
+        // Select theme as per time
+        if (hours >= 19 || hours <= 7) { //night between 7pm and 7am
+            toggleSwitch.checked = true;
+            document.body.classList.add("night");
+        }
+        toggleSwitch.onchange = (e) => {
+            if (e.target.checked) {
+                document.body.classList.add("night");
+            } else {
+                document.body.classList.remove("night");
+            }
+        }
+
+    </script>
+</body>
+
+</html>
