@@ -4,20 +4,345 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Example Links | Sanjay Goraniya</title>
+    <title>Examples | Sanjay Goraniya</title>
     <link rel="icon" sizes="256x256" href="/favicon.ico">
     <style>
-        .flex { display: flex }
-        .flex-col { flex-direction: column }
+        body {
+            --main-background: #eee;
+            --main-hover-background: #cfcfcf;
+            --main-blur-background: #eeeeee6a;
+            --main-text: #444452;
+            --heading-text: #313131;
+
+            --link-text: #0366d6;
+            --link-main-background: transparent;
+            --link-hover-background: #0366d62a;
+
+            --selection-background: #ffdc00;
+            --selection-text: inherit;
+
+            --scrollbar-size: 11px;
+
+            --font-sans: "Calibre", "San Francisco", "SF Pro Text", -apple-system, system-ui, sans-serif;
+            --font-mono: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace;
+
+            scrollbar-width: thin;
+            scrollbar-color: var(--main-text) var(--main-background);
+            margin: 0;
+            padding: 0;
+            background-color: var(--main-background);
+            color: var(--main-text);
+            line-height: 1.5;
+            width: 100%;
+            position: relative;
+            min-width: 280px;
+            font-family: var(--font-sans);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        main {
+            margin: 0 auto;
+            width: 100%;
+            max-width: 1600px;
+            min-height: 100vh;
+            padding: 0 170px;
+        }
+
+        header {
+            padding: 20px;
+        }
+
+        header .big-heading {
+            color: var(--heading-text);
+            font-size: clamp(40px, 8vw, 80px);
+            margin: 0;
+        }
+
+        header .subtitle {
+            margin: 0;
+            color: var(--link-text);
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        main.fillHeight {
+            padding: 0 150px;
+        }
+
+        section {
+            margin-top: 45px;
+        }
+
+        section .archive {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .archive tbody tr:hover,
+        .archive tbody tr:focus {
+            background-color: var(--main-hover-background);
+        }
+
+        .archive th,
+        .archive td {
+            padding: 10px;
+            text-align: left;
+            font-weight: 400;
+        }
+
+        .archive th:first-child,
+        .archive td:first-child {
+            padding-left: 20px;
+        }
+
+        .archive th:last-child,
+        .archive td:last-child {
+            padding-right: 20px;
+        }
+
+        .archive th svg,
+        .archive td svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .archive tr td:first-child {
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .archive tr td:last-child {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .archive td.year {
+            padding-right: 20px;
+            color: var(--link-text);
+            font-size: 20px;
+            font-weight: 400;
+        }
+
+        .archive td.title {
+            padding-right: 20px;
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--heading-text);
+            max-width: 450px;
+        }
+
+        .archive td.company {
+            font-size: 18px;
+            white-space: nowrap;
+        }
+
+        header .big-heading,
+        header .subtitle,
+        .archive td.year,
+        .archive td.tech {
+            font-family: var(--font-mono);
+        }
+
+        .archive td.tech {
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .archive td.tech .separator {
+            margin: 0 5px;
+        }
+
+        .archive td .with-separator:not(:last-child)::after {
+            content: '·';
+            margin: 0 5px;
+        }
+
+        .archive td.tech span {
+            display: inline-block;
+        }
+
+        .archive td.links {
+            min-width: 100px;
+        }
+
+        .archive td.links div {
+            display: flex;
+            align-items: center;
+        }
+
+        .archive td.links div a {
+            color: inherit;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .archive td.links div a:hover,
+        .archive td.links div a:focus {
+            color: var(--link-text);
+        }
+
+        .archive td.links div a+a {
+            margin-left: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .archive td.year {
+                padding-right: 10px;
+                font-size: 14px;
+            }
+
+            .archive th:first-child,
+            .archive td:first-child {
+                padding-left: 10px;
+            }
+
+            .archive th:last-child,
+            .archive td:last-child {
+                padding-right: 10px;
+            }
+
+            .archive .hide-on-mobile {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="flex flex-col">
-        <a href="/examples/countdown.html">Countdown using VanillaJS</a>
-        <a href="/examples/countdown-web-components.html">Countdown using VanillaJS Web Components</a>
-        <a href="/examples/words-counter.html">Words counter using VanillaJS</a>
-        <a href="/examples/toggle-theme.html">Toggle Theme using VanillaJS</a>
-        <a href="/examples/percentage-calculator.html">Percentage Calculator using VanillaJS</a>
-    </div>
+    <main>
+        <header>
+            <h1 class="big-heading">Examples</h1>
+            <p class="subtitle">List of things I've worked on</p>
+        </header>
+        <section>
+            <table class="archive">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Title</th>
+                        <th class="hide-on-mobile">Made at</th>
+                        <th class="hide-on-mobile">Built with</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <script>
+        document.myIcons = {
+            website: `<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link"><title>External Link</title><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`,
+            github: `<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>`,
+            appleAppStore: `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 512 512" xml:space="preserve"><title>Apple App Store</title><g><g><path d="M407,0H105C47.103,0,0,47.103,0,105v302c0,57.897,47.103,105,105,105h302c57.897,0,105-47.103,105-105V105 C512,47.103,464.897,0,407,0z M482,407c0,41.355-33.645,75-75,75H105c-41.355,0-75-33.645-75-75V105c0-41.355,33.645-75,75-75h302 c41.355,0,75,33.645,75,75V407z"></path></g></g><g><g><path d="M305.646,123.531c-1.729-6.45-5.865-11.842-11.648-15.18c-11.936-6.892-27.256-2.789-34.15,9.151L256,124.166 l-3.848-6.665c-6.893-11.937-22.212-16.042-34.15-9.151h-0.001c-11.938,6.893-16.042,22.212-9.15,34.151l18.281,31.664 L159.678,291H110.5c-13.785,0-25,11.215-25,25c0,13.785,11.215,25,25,25h189.86l-28.868-50h-54.079l85.735-148.498 C306.487,136.719,307.375,129.981,305.646,123.531z"></path></g></g><g><g><path d="M401.5,291h-49.178l-55.907-96.834l-28.867,50l86.804,150.348c3.339,5.784,8.729,9.921,15.181,11.65 c2.154,0.577,4.339,0.863,6.511,0.863c4.332,0,8.608-1.136,12.461-3.361c11.938-6.893,16.042-22.213,9.149-34.15L381.189,341 H401.5c13.785,0,25-11.215,25-25C426.5,302.215,415.285,291,401.5,291z"></path></g></g><g><g><path d="M119.264,361l-4.917,8.516c-6.892,11.938-2.787,27.258,9.151,34.15c3.927,2.267,8.219,3.345,12.458,3.344 c8.646,0,17.067-4.484,21.693-12.495L176.999,361H119.264z"></path></g></g></svg>`,
+            googlePlayStore: `<svg xmlns="http://www.w3.org/2000/svg" role="img" x="0px" y="0px" viewBox="0 0 512.001 512.001"><title>Google Play Store</title><path d="M464.252,212.09L99.624,8.07C84.247-1.873,64.754-2.691,48.574,5.967C32.183,14.74,22,31.737,22,50.329v411.342 c0,18.592,10.183,35.59,26.573,44.361c16.097,8.617,35.593,7.891,51.052-2.101l364.628-204.022 c16.121-9.02,25.747-25.435,25.747-43.908C490,237.527,480.374,221.111,464.252,212.09z M341.677,181.943l-50.339,50.339 L113.108,54.051L341.677,181.943z M55.544,467.323V44.676L267.621,256L55.544,467.323z M113.108,457.949l178.232-178.231 l50.339,50.339L113.108,457.949z M447.874,270.637l-75.779,42.401l-57.038-57.037l57.037-57.037l75.778,42.4 c7.746,4.335,8.583,11.68,8.583,14.637C456.455,258.958,455.62,266.302,447.874,270.637z"></path></svg>`,
+        }
+        class MyIconElement extends HTMLElement {
+            constructor() {
+                super();
+                this.style = "line-height: 0;";
+            }
+            static get observedAttributes() {
+                return ['name'];
+            }
+            setIcon({ name, icon }) {
+                return document.myIcons[name] = icon;
+            }
+            connectedCallback() {
+                this.render()
+            }
+            attributeChangedCallback() {
+                this.render()
+            }
+            render() {
+                this.innerHTML = document.myIcons[this.getAttribute('name')] || "X";
+            }
+        }
+        customElements.define('my-icon', MyIconElement);
+        const tableEl = document.querySelector('.archive > tbody');
+        const archives = [{
+            year: '2020',
+            title: "Personal Website",
+            tech: ['HTML', 'SCSS', 'ReactJS'],
+            links: [{
+                title: 'website',
+                url: '//sanjaygoraniya.github.io'
+            }, {
+                title: 'github',
+                url: '//github.com/SanjayGoraniya/sanjaygoraniya.github.io'
+            }]
+        }, {
+            year: '2021',
+            title: "Words & Characters Counter",
+            tech: ['HTML', 'CSS', 'VanillaJS'],
+            links: [{
+                title: 'website',
+                url: '//sanjaygoraniya.github.io/examples/words-counter.html'
+            }, {
+                title: 'github',
+                url: '//github.com/SanjayGoraniya/examples/blob/main/words-counter.html'
+            }]
+        }, {
+            year: '2021',
+            title: "Countdown Timer",
+            tech: ['HTML', 'CSS', 'VanillaJS'],
+            links: [{
+                title: 'website',
+                url: '//sanjaygoraniya.github.io/examples/countdown.html'
+            }, {
+                title: 'github',
+                url: '//github.com/SanjayGoraniya/examples/blob/main/countdown.html'
+            }]
+        }, {
+            year: '2021',
+            title: "Countdown Timer With Web Components & More functionalities",
+            tech: ['HTML', 'CSS', 'VanillaJS'],
+            links: [{
+                title: 'website',
+                url: '//sanjaygoraniya.github.io/examples/countdown-web-components.html'
+            }, {
+                title: 'github',
+                url: '//github.com/SanjayGoraniya/examples/blob/main/countdown-web-components.html'
+            }]
+        }, {
+            year: '2021',
+            title: "Toggle Theme",
+            tech: ['HTML', 'CSS', 'VanillaJS'],
+            links: [{
+                title: 'website',
+                url: '//sanjaygoraniya.github.io/examples/toggle-theme.html'
+            }, {
+                title: 'github',
+                url: '//github.com/SanjayGoraniya/examples/blob/main/toggle-theme.html'
+            }]
+        }, {
+            year: '2021',
+            title: "Percentage Calculator",
+            tech: ['HTML', 'CSS', 'VanillaJS'],
+            links: [{
+                title: 'website',
+                url: '//sanjaygoraniya.github.io/examples/percentage-calculator.html'
+            }, {
+                title: 'github',
+                url: '//github.com/SanjayGoraniya/examples/blob/main/percentage-calculator.html'
+            }]
+        },]
+        
+        archives.reverse().forEach(({ year, title, company = '—', tech, links }, index) => {
+            let tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="year">${year}</td>
+                <td class="title">${title}</td>
+                <td class="company hide-on-mobile">${company}</td>
+                <td class="tech hide-on-mobile">${tech.map((t) => `<span class="with-separator">${t}</span>`).join('')}</td>
+                <td class="links"><div>${links.map(({ title: t, url: u }) => `<a href="${u}" aria-label="${t}"><my-icon name="${t}"></my-icon></a>`).join('')}</div></td>
+            `
+            tableEl.append(tr);
+        });
+    </script>
 </body>
 </html>
