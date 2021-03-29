@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Background Color Flipper | Sanjay Goraniya</title>
+    <style>
+        :root {
+            --font-family: monospace, "Roboto", sans-serif;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: var(--font-family);
+            line-height: 1.5;
+            font-size: 0.875rem;
+        }
+        main {
+            min-height: calc(100vh - 3rem);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            text-align: center;
+        }
+        .inline-wrapper {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 0;
+        }
+        .icon {
+            padding: 16px;
+            line-height: 0;
+            display: inline-block;
+            border-top-right-radius: 0.25rem;
+            border-bottom-right-radius: 0.25rem;
+            background-color: yellowgreen;
+            cursor: pointer;
+        }
+        h1 {
+            color: white;
+            mix-blend-mode: difference;
+        }
+        .container h2 {
+            font-size: 1.5em;
+            background: #1e1e1e;
+            color: #fff;
+            padding: 1rem;
+            border-top-left-radius: 0.25rem;
+            border-bottom-left-radius: 0.25rem;
+        }
+        .property {
+            color: #9cdcfe;
+        }
+        .color {
+            color: #ce9178;
+        }
+        .color-box {
+            display: inline-block;
+            height: 0.6em;
+            width: 0.6em;
+            margin-right: 4px;
+            border: 1px solid white;
+            background-color: #f1f5f8;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: #0f2941;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-family: var(--font-family);
+            font-weight: 700;
+            border: 2px solid #4CAF50;
+            cursor: pointer;
+            border-radius: 0.25rem;
+            font-size: 1.4rem;
+            padding: .75rem 1.75rem;
+            user-select: none;
+        }
+        .btn:hover,
+        .btn:focus {
+            color: white;
+        }
+        #copy:hover,
+        .btn:hover,
+        :focus {
+            box-shadow: 0 0 10px 5px rgba(0, 0, 0, .7);
+            outline: none;
+        }
+        /* Tooltip Style */
+        .tooltip {
+            --tooltip-font-size: 14px;
+            --tooltip-bg-color: #000;
+            --tooltip-text-color: #fff;
+            position: relative;
+        }
+        .tooltip:active::before,
+        .tooltip:focus::before,
+        .tooltip:hover::before {
+            content: attr(data-tooltip-text);
+            background-color: var(--tooltip-bg-color);
+            width: max-content;
+            color: var(--tooltip-text-color);
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 5px;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: var(--tooltip-font-size);
+            position: absolute;
+            z-index: 1;
+            line-height: 1;
+        }
+        .tooltip:active::after,
+        .tooltip:focus::after,
+        .tooltip:hover::after {
+            content: "";
+            top: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: var(--tooltip-bg-color);
+            font-size: var(--tooltip-font-size);
+            position: absolute;
+            z-index: 1;
+            line-height: 1;
+        }
+        /* Tooltip Style */
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>Background color flipper</h1>
+        <div class="container">
+            <div class="inline-wrapper">
+                <h2 class="background-color"><span class="property">background-color</span>: <span
+                        class="color-box"></span><span class="color">#XXXXXX</span>;</h2>
+                <span class="icon tooltip" id="copy" data-tooltip-text="Copy to Clipboard." tabindex="2">
+                    <svg viewBox="0 0 16 16" version="1.1" width="32" height="32" aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M5.75 1a.75.75 0 00-.75.75v3c0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75v-3a.75.75 0 00-.75-.75h-4.5zm.75 3V2.5h3V4h-3zm-2.874-.467a.75.75 0 00-.752-1.298A1.75 1.75 0 002 3.75v9.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0014 13.25v-9.5a1.75 1.75 0 00-.874-1.515.75.75 0 10-.752 1.298.25.25 0 01.126.217v9.5a.25.25 0 01-.25.25h-8.5a.25.25 0 01-.25-.25v-9.5a.25.25 0 01.126-.217z">
+                        </path>
+                    </svg>
+                </span>
+            </div>
+            <button class="btn" id="flip-btn">flip</button>
+        </div>
+    </main>
+    <script>
+        // Html elements.
+        const flipBtnEl = document.getElementById("flip-btn");
+        const colorEl = document.querySelector(".color");
+        const colorBoxEl = document.querySelector('.color-box');
+        const bgColorEL = document.querySelector(".background-color");
+        const copyBtnEl = document.querySelector('#copy');
+        const newHexColor = () => '#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
+        // Copy to clipboard.
+        copyBtnEl.onclick = () => document.execCommand("copy");
+        bgColorEL.addEventListener("copy", (e) => {
+            e.preventDefault();
+            console.log('ok!')
+            if (e.clipboardData) {
+                let text = bgColorEL.textContent;
+                e.clipboardData.setData("text/plain", text);
+                // copyBtnEl.dataset.tooltipText = `Copied - ${text}`;
+                copyBtnEl.dataset.tooltipText = `Copied!`;
+            }
+        });
+        // Handle flip button.
+        flipBtnEl.addEventListener("click", () => changeColor(newHexColor()));
+        const changeColor = (hexColor) => {
+            copyBtnEl.dataset.tooltipText = 'Copy to Clipboard.';
+            colorEl.textContent = hexColor;
+            document.body.style.backgroundColor = hexColor;
+            colorBoxEl.style.backgroundColor = hexColor;
+        }
+        // Intro color.
+        changeColor`#f1f3f5`;
+    </script>
+</body>
+</html>
