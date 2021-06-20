@@ -400,6 +400,30 @@
                 title: 'github',
                 url: '//github.com/SanjayGoraniya/examples/blob/main/{{file}}'
             }]
+        }, {
+            year: '2021',
+            title: "Pure CSS Filled Arrows",
+            tech: ['HTML', 'CSS', 'VanillaJS'],
+            file: 'pure-css-filled-arrows.html',
+            links: [{
+                title: 'website',
+                url: './{{file}}'
+            }, {
+                title: 'github',
+                url: '//github.com/SanjayGoraniya/examples/blob/main/{{file}}'
+            }]
+        }, {
+            year: '2021',
+            title: "Pure CSS Line Arrows",
+            tech: ['HTML', 'CSS', 'VanillaJS'],
+            file: 'pure-css-line-arrows.html',
+            links: [{
+                title: 'website',
+                url: './{{file}}'
+            }, {
+                title: 'github',
+                url: '//github.com/SanjayGoraniya/examples/blob/main/{{file}}'
+            }]
         },]
         
         archives.reverse().forEach(({ year, title, company = '—', tech, file = '', links }, index) => {
@@ -409,7 +433,7 @@
                 <td class="title">${title}</td>
                 <td class="company hide-on-mobile">${company}</td>
                 <td class="tech hide-on-mobile">${tech.map((t) => `<span class="with-separator">${t}</span>`).join('')}</td>
-                <td class="links"><div>${links.map(({ title: t, url: u }) => `<a href="${u.replace('{{file}}', file)}" aria-label="${t}"><my-icon name="${t}"></my-icon></a>`).join('')}</div></td>
+                <td class="links"><div>${links.map(({ title: t, url: u }) => `<a href="${u.replace('{{file}}', file)}" target="_blank" aria-label="${t}"><my-icon name="${t}"></my-icon></a>`).join('')}</div></td>
             `
             tableEl.append(tr);
         });
