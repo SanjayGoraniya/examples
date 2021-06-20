@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Arrows using CSS | Sanjay Goraniya</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		body { text-align: center }
+		h2 { margin: 1.2em 0 }
+		p { margin: .5em }
+		.filled-arrow {
+			display: inline-block;
+			height: 0px;
+			border-style: solid;
+			width: 0px;
+			margin: 0;
+			padding: 0;
+			line-height: 0;
+			--arrow-size: 8px;
+		}
+		.filled-arrow.left {
+			transform: translateY(16%);
+			border-color: transparent black;
+			border-width: var(--arrow-size) var(--arrow-size) var(--arrow-size) 0px;
+		}
+		.filled-arrow.right {
+			transform: translateY(16%);
+			border-color: transparent black;
+			border-width: var(--arrow-size) 0px var(--arrow-size) var(--arrow-size);
+		}
+		.filled-arrow.down {
+			border-color: black transparent;
+			border-width: var(--arrow-size) var(--arrow-size) 0px var(--arrow-size);
+		}
+		.filled-arrow.up {
+			border-color: black transparent;
+			border-width: 0px var(--arrow-size) var(--arrow-size) var(--arrow-size);
+		}
+	</style>
+</head>
+
+<body>
+	<h2>Pure CSS filled arrows</h2>
+
+	<p> Right arrow: <i class="filled-arrow right"></i></p>
+	<p> Left arrow: <i class="filled-arrow left"></i></p>
+	<p> Up arrow: <i class="filled-arrow up"></i></p>
+	<p> Down arrow: <i class="filled-arrow down"></i></p>
+</body>
+
+</html>
