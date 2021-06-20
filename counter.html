@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Counter | Sanjay Goraniya</title>
+    <style>
+        *,
+        ::after,
+        ::before {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: monospace;
+            background-color: #eee;
+            color: var(--clr-grey-1);
+            line-height: 1.5;
+            font-size: 0.875rem;
+        }
+        h1 {
+            font-size: 3rem;
+            letter-spacing: 0.25rem;
+            text-transform: capitalize;
+            line-height: 1.25;
+            margin-bottom: 0.75rem;
+            font-family: monospace;
+        }
+        button {
+            display: inline-block;
+            background-color: transparent;
+            color: #0366d6;
+            margin: 0.5rem;
+            padding: 0.375rem 0.75rem;
+            font-size: 1.25rem;
+            border: 2px solid #0366d6;
+            cursor: pointer;
+            border-radius: 4px;
+            line-height: 1;
+            text-decoration: none;
+            user-select: none;
+            
+        }
+        @media screen and (min-width: 800px) {
+            body {
+                font-size: 1rem;
+            }
+            h1 {
+                font-size: 4rem;
+                line-height: 1;
+            }
+        }
+        
+        button:hover,
+        button:focus {
+            outline: none;
+            background-color: #0366d62a;
+            box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        main {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        #counter {
+            font-size: 6rem;
+            font-weight: bold;
+            color: teal;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="container">
+            <h1>counter</h1>
+            <span id="counter">0</span>
+            <div class="button-container">
+                <button class="decrease">-</button>
+                <button class="reset">↺</button>
+                <button class="increase">+</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        let count = 0;
+        const counter = document.querySelector("#counter");
+        const incBtn = document.querySelector(".increase");
+        const decBtn = document.querySelector(".decrease");
+        const resetBtn = document.querySelector(".reset");
+        const update = () => {
+            counter.style.color = count > 0 ? 'green' : count < 0 ? 'red' : 'teal';
+            counter.textContent = count;
+        }
+        incBtn.onclick = () => {
+            count++;
+            update();
+        }
+        decBtn.onclick = () => {
+            count--;
+            update();
+        }
+        resetBtn.onclick = () => {
+            count = 0;
+            update();
+        }
+
+    </script>
+</body>
+
+</html>
