@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Game Controller | Sanjay Goraniya</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    body {
+      text-align: center
+    }
+
+    h2 {
+      margin: 1.2em 0
+    }
+
+    .controller-left,
+    .cross-top,
+    .cross-bottom,
+    .cross-left,
+    .cross-right,
+    .circle,
+    .play,
+    .pause {
+      box-sizing: content-box
+    }
+
+    .controller-left {
+      height: 250px;
+      width: 250px;
+      margin: 0 auto;
+      padding: 2px;
+      border: none;
+      background-color: #E6E6E6;
+      border-radius: 100%;
+      box-shadow: -15px 8px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .circle {
+      height: 200px;
+      width: 200px;
+      background-color: #E6E6E6;
+      margin: 23px auto;
+      border-radius: 100%;
+      border: solid 5px rgba(184, 184, 184, 1);
+    }
+
+    .cross-center {
+      background-color: #333333;
+      width: 50px;
+      height: 50px;
+      margin: 75px auto;
+      position: relative;
+    }
+
+    .cross-top,
+    .cross-bottom,
+    .cross-left,
+    .cross-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cross-top {
+      background-color: #333333;
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      border-radius: 15% 15% 0 0;
+      margin-top: -50px;
+    }
+
+    .cross-bottom {
+      background-color: #333333;
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      border-radius: 0 0 15% 15%;
+      margin-top: 50px;
+    }
+
+    .cross-left {
+      background-color: #333333;
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      border-radius: 15% 0 0 15%;
+      margin-left: -50px;
+    }
+
+    .cross-right {
+      background-color: #333333;
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      border-radius: 0 15% 15% 0;
+      margin-left: 50px;
+    }
+
+    .cross-circle {
+      background-color: #000000;
+      width: 35px;
+      height: 35px;
+      position: absolute;
+      border-radius: 100%;
+      margin-top: 8px;
+      margin-left: 8px;
+    }
+
+    .play {
+      border-color: transparent #000000;
+      border-style: solid;
+      border-width: 15px 0px 15px 15px;
+      width: 0px;
+      height: 0px;
+      position: absolute;
+      margin-top: 10px;
+      margin-left: 18px;
+    }
+
+    .pause {
+      background: transparent;
+      width: 7px;
+      border-left: 8px solid black;
+      border-right: 8px solid black;
+      height: 30px;
+      position: absolute;
+      margin-top: 10px;
+      margin-left: 14px;
+    }
+
+    .arrow {
+      border: solid #000000;
+      border-width: 0 3px 3px 0;
+      display: inline-block;
+      padding: 3px;
+    }
+
+    .right {
+      transform: rotate(-45deg);
+      -webkit-transform: rotate(-45deg);
+    }
+
+    .left {
+      transform: rotate(135deg);
+      -webkit-transform: rotate(135deg);
+    }
+
+    .up {
+      transform: rotate(-135deg);
+      -webkit-transform: rotate(-135deg);
+    }
+
+    .down {
+      transform: rotate(45deg);
+      -webkit-transform: rotate(45deg);
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Game controller design</h2>
+  <div class="controller-left">
+    <div class="circle">
+      <div class="cross-center">
+        <div id="up" class="cross-top">
+          <i id="up" class="arrow up"></i>
+        </div>
+        <div id="down" class="cross-bottom">
+          <i id="down" class="arrow down"></i>
+        </div>
+        <div id="left" class="cross-left">
+          <i id="left" class="arrow left"></i>
+        </div>
+        <div id="right" class="cross-right">
+          <i id="right" class="arrow right"></i>
+        </div>
+        <div id="play-pause" class="pause"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    const byId = id => document.getElementById(id);
+    const up = byId("up");
+    const down = byId("down");
+    const left = byId("left");
+    const right = byId("right");
+    const playPause = byId("play-pause");
+
+    [up, down, left, right, playPause].forEach(el => {
+      el.addEventListener('click', (e) => alert(`You clicked on ${el.id}`))
+    })
+  </script>
+</body>
+
+</html>
