@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://unpkg.com/tailwindcss@0.3.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="h-screen overflow-hidden flex items-center justify-center" style="background: #edf2f7;">
+    <div class="h-full w-full flex items-center justify-center bg-teal-lightest font-sans lg:p-6">
+        <div class="h-full w-full bg-white rounded shadow p-4 w-full lg:w-3/4 lg:max-w-lg flex flex-col">
+            <form class="mb-4 select-none">
+                <h1 class="text-grey-darkest ">Todo List</h1>
+                <div class="flex mt-4">
+                    <input data-todo-input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" placeholder="Add Todo">
+                    <button data-todo-btn class="flex-no-shrink p-2 ml-4 mr-2 border-2 rounded hover:text-white text-green border-green hover:bg-green">Add</button>
+                </div>
+            </form>
+            <div data-todo-container class="flex-1 overflow-x-scroll"></div>
+        </div>
+    </div>
+    <script>
+        const TODO_PREFIX = "TAILWIND_TODO_LIST";
+        const qs = (q) => document.querySelector(q);
+        const todoInput = qs('[data-todo-input]');
+        const todoBtn = qs('[data-todo-btn]');
+        const todoContainer = qs('[data-todo-container]');
+        const setItem = (allTodo) => localStorage.setItem(TODO_PREFIX, JSON.stringify(allTodo));
+        const getItem = () => JSON.parse(localStorage.getItem(TODO_PREFIX));
+        const createElement = (elementName, config) => {
+            let elem = document.createElement(elementName);
+            for (const key in config) {
+                let elemValue = config[key]
+                if (config.hasOwnProperty(key) && elemValue !== undefined) {
+                    elem[key] = elemValue;
+                }
+            }
+            return elem;
+        }
+        var todoList = getItem() || [];
+        const renderPage = (newTodoList) => {
+            todoContainer.innerHTML = '';
+            (newTodoList || todoList).forEach(element => {
+                renderTodoItem(element);
+            });
+        }
+        const updateTodoById = (id) => {
+            todoList = todoList.map(todo => todo.id === id ? {...todo, completed: !todo.completed} : todo);
+            setItem(todoList);
+            renderPage(todoList);
+        }
+        const handleCompletedClick = (id) => () => {
+            updateTodoById(id);
+        }
+        const handleRemoveClick = (id) => () => {
+            todoList = todoList.filter((todo) => todo.id !== id);
+            setItem(todoList);
+            renderPage(todoList);
+        }
+        const renderTodoItem = ({id, todo, completed}) => {
+            let div = createElement('div', {classList: 'flex mb-4 items-center'});
+            let todoText = createElement('p', {dataset: { status: true }, classList: `w-full ${completed ? 'line-through text-green' : 'text-grey-darkest'}`, innerText: todo});
+            div.append(todoText);
+            let completedBtn = createElement('button', {innerText: !completed ? 'Done' : 'Not Yet', classList: `flex-no-shrink p-2 ml-2 border-2 rounded text-green border-green hover:text-white hover:bg-green`});
+            let deleteBtn = createElement('button', {innerText: 'Remove', classList: 'flex-no-shrink p-2 ml-2 border-2 rounded text-red border-red hover:text-white hover:bg-red select-none'});
+            completedBtn.onclick = handleCompletedClick(id);
+            deleteBtn.onclick = handleRemoveClick(id);
+            div.append(completedBtn);
+            div.append(deleteBtn);
+            return todoContainer.append(div);
+        }
+        renderPage();
+        const addTodo = (todo) => {
+            todoList.push(todo);
+            return setItem([...todoList]);
+        }
+        todoBtn.onclick = (e) => {
+            e.preventDefault();
+            let todo = todoInput.value.trim();
+            if(!todo) return;
+            let todoItem = { id: new Date().getTime() + Math.random(), todo: todo, completed: false};
+            addTodo(todoItem);
+            todoInput.value = '';
+            return renderTodoItem(todoItem);
+        }
+    </script>
+</body>
+</html>
