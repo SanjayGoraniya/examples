@@ -13,7 +13,8 @@
 </head>
 
 <body class="min-h-screen bg-gray-100 flex content-center items-center">
-    <section class="p-1 bg-blueGray-50 w-full">
+    <section class="p-1 bg-blueGray-50 w-full ">
+        <h1 class="font-semibold text-base text-blueGray-700 text-2xl text-center">Github repository language viewer</h1>
         <div class="w-full xl:w-8/12 mb-12 xl:mb-0 px-4 mx-auto mt-24">
             <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded ">
                 <div class="rounded-t mb-0 px-4 py-3 border-0">
@@ -27,7 +28,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="block w-full overflow-x-auto">
                     <table class="items-center bg-transparent w-full border-collapse ">
                         <thead>
@@ -36,7 +36,7 @@
                                     Language Name
                                 </th>
                                 <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                                    Files Count
+                                    Bytes of code
                                 </th>
                             </tr>
                         </thead>
@@ -58,22 +58,33 @@
         </footer>
     </section>
     <script defer>
-        console.clear();
+        const errors = {};
         const body = document.querySelector('.tbody');
         const button = document.querySelector('#button');
         const input = document.querySelector('#input');
-        const handleError = (error) => {
-                console.log("Error", error);
-            }
-        const handleReq = (res) => {
+        const showError = (error) => {
+            body.innerHTML = `
+                <tr>
+                    <td colspan="2" class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left font-semibold text-center text-red-500 ">
+                        ${error}
+                    </td>
+                </tr>
+            `
+        }
+        const errorHandler = ({response}) => {
+            let message = response.data.message;
+            errors[input.value] = message;
+            return showError(message);
+        }
+        const requestHandler = (res) => {
             let languages = res.data;
             body.innerHTML = '';
             for (lang in languages) {
                 let html = `
                 <tr>
-                    <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700 ">
+                    <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700 font-semibold">
                         ${lang}
-                    </th>
+                    </td>
                     <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
                         ${languages[lang]}
                     </td>
@@ -82,10 +93,25 @@
                 body.innerHTML += html;
             }
         }
-        button.addEventListener('click', () => {
+        const getData = () => {
+            if(!input.value || input.value.trim().split('/').filter((string) => string !== '').length !== 2) {
+                return showError("Please Enter Valid username/repository name");
+            }
+            if(errors[input.value]) {
+                return showError(errors[input.value]);
+            }
             let url = `https://api.github.com/repos/${input.value}/languages`;
-            axios.get(url).then(handleReq).catch(handleError); 
+            axios.get(url).then(requestHandler).catch(errorHandler); 
+        }
+        
+        input.addEventListener('keydown', (event) => {
+            if(event.key !== 'Enter') {
+                return true;
+            }
+            getData();
         });
+        button.addEventListener('click', getData);
     </script>
 </body>
+
 </html>
