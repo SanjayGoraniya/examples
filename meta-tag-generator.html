@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta Tag Generator | Sanjay Goraniya</title>
+    <link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/styles/tailwind.css">
+    <link rel="stylesheet"
+        href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
+    
+    <style>
+        label.required:after {
+            content: " *";
+            color: #ff8080;
+        }
+    </style>
+</head>
+
+<body style="height: min-content;" class="my-auto w-full">
+    <section class=" py-1 bg-blueGray-50">
+        <div class="w-full lg:w-8/12 px-4 mx-auto mt-6">
+            <div
+                class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
+                <div class="rounded-t bg-white mb-0 px-6 py-6">
+                    <div class="text-center flex justify-between">
+                        <h1 class="text-blueGray-700 text-xl font-bold">
+                            Meta Tag Generator
+                        </h1>
+                        <!-- <button
+                            class="bg-lightBlue-500 text-white active:bg-lightBlue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                            type="button">
+                            Settings
+                        </button> -->
+                    </div>
+                </div>
+                <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+                    <form id="seo-form">
+                        <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold">Information</h6>
+                        <div class="flex flex-wrap">
+                            <div class="w-full lg:w-6/12 px-4">
+                                <div class="relative w-full mb-3">
+                                    <label class="block text-blueGray-600 text-xs font-bold mb-2 required"
+                                        htmlfor="grid-password">
+                                        Site Title
+                                    </label>
+                                    <input type="text" name="title" id="title"
+                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                        value="">
+                                    <p class="text-red-500"></p>
+                                </div>
+                            </div>
+                            <div class="w-full lg:w-6/12 px-4">
+                                <div class="relative w-full mb-3">
+                                    <label class="block text-blueGray-600 text-xs font-bold mb-2 required"
+                                        htmlfor="grid-password">
+                                        Site URL
+                                    </label>
+                                    <input type="text" name="url" id="url"
+                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                        value="">
+                                </div>
+                            </div>
+                            <div class="w-full lg:w-6/12 px-4">
+                                <div class="relative w-full mb-3">
+                                    <label class="block text-blueGray-600 text-xs font-bold mb-2 required"
+                                        htmlfor="grid-password">
+                                        Site Description
+                                    </label>
+                                    <textarea type="text" name="description" id="description"
+                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                        rows="4"></textarea>
+                                </div>
+                            </div>
+                            <div class="w-full lg:w-6/12 px-4">
+                                <div class="relative w-full mb-3">
+                                    <label class="block text-blueGray-600 text-xs font-bold mb-2 required"
+                                        htmlfor="grid-password">
+                                        Site Keywords (Separate with commas)
+                                    </label>
+                                    <textarea type="text" name="keywords" id="keywords"
+                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                        rows="4"></textarea>
+                                </div>
+                            </div>
+                            <div class="w-full lg:w-6/12 px-4">
+                                <div class="relative w-full mb-3">
+                                    <label class="block text-blueGray-600 text-xs font-bold mb-2"
+                                        htmlfor="grid-password">
+                                        Allow robots to index your website?
+                                    </label>
+                                    <select type="text" name="robots" id="robots-index"
+                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                        value="index">
+                                        <option value="index">Yes</option>
+                                        <option value="noindex">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="w-full lg:w-6/12 px-4">
+                                <div class="relative w-full mb-3">
+                                    <label class="block text-blueGray-600 text-xs font-bold mb-2"
+                                        htmlfor="grid-password">
+                                        Allow robots to follow all links?
+                                    </label>
+                                    <select type="text" name="robots" id="robots-follow"
+                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                        value="follow">
+                                        <option value="follow">Yes</option>
+                                        <option value="nofollow">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="w-full lg:w-6/12 px-4">
+                                <div class="relative w-full mb-3">
+                                    <label class="block text-blueGray-600 text-xs font-bold mb-2"
+                                        htmlfor="grid-password">
+                                        What type of content will your site display?
+                                    </label>
+                                    <select type="text" name="content" id="content"
+                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                        value="text/html; charset=utf-8">
+                                        <option value="text/html; charset=utf-8">UTF-8</option>
+                                        <option value="text/html; charset=utf-16">UTF-16</option>
+                                        <option value="text/html; charset=iso-8859-1">ISO-8859-1</option>
+                                        <option value="text/html; charset=windows-1252">WINDOWS-1252</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="w-full lg:w-6/12 px-4">
+                                <div class="relative w-full mb-3">
+                                    <label class="block text-blueGray-600 text-xs font-bold mb-2"
+                                        htmlfor="grid-password">
+                                        What is your site primary language?
+                                    </label>
+                                    <select type="text" name="language" id="language"
+                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                        value="English">
+                                        <option value="English">English</option>
+                                        <option value="French">French</option>
+                                        <option value="Spanish">Spanish</option>
+                                        <option value="Russian">Russian</option>
+                                        <option value="Arabic">Arabic</option>
+                                        <option value="Japanese">Japanese</option>
+                                        <option value="Korean">Korean</option>
+                                        <option value="Hindi">Hindi</option>
+                                        <option value="Portuguese">Portuguese</option>
+                                        <option value="N/A">No Language Tag</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="w-full lg:w-6/12 px-4">
+                                <button
+                                    class="bg-lightBlue-500 text-white active:bg-lightBlue-600 font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                                    type="submit">
+                                    Generate Meta Tags
+                                </button>
+                            </div>
+                        </div>
+                        <hr class="mt-6 border-b-1 border-blueGray-300">
+                    </form>
+                    <div>
+                        <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold">Your Generated Meta Tags</h6>
+                        <div class="flex flex-wrap">
+                            <div class="w-full lg:w-12/12 px-4">
+                                <div class="relative w-full mb-3">
+                                    <textarea type="text" readonly name="output" id="output"
+                                        class="border-0 px-2 py-2 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                        rows="8"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="relative pt-8 pb-6 mt-2">
+                <div class="container mx-auto px-4">
+                    <div class="flex flex-wrap items-center md:justify-between justify-center">
+                        <div class="w-full md:w-6/12 px-4 mx-auto text-center">
+                            <div class="text-sm text-blueGray-500 font-semibold py-1">
+                                Made with Love by <a href="https://www.creative-tim.com"
+                                    class="text-blueGray-500 hover:text-blueGray-800" target="_blank"> Creative Tim</a>.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </section>
+    <script>
+        const form = document.getElementById("seo-form");
+        const output= document.getElementById('output');
+
+        function oneLineTag(tag, options){
+            return Object.assign(document.createElement(tag), options);
+        }
+
+        const handleSubmit = (event) => {
+            event.preventDefault();
+            let elements = Array.from(event.target.elements).filter((element) => element.type !== 'submit');
+            let requiredIds = ['title', 'url', 'keywords', 'description'];
+            let errors = [];
+            elements.forEach((element) => {
+                if(element.parentNode.querySelector('label.required') && element.value.trim() === ''){
+                    let errorElement = element.parentNode.querySelector('p');
+                    if(!errorElement) {
+                        errorElement = oneLineTag('p', { classList: 'text-red-500' });
+                        element.parentNode.appendChild(errorElement);
+                    }
+                    errorElement.innerText = element.id + " is required!";
+                    errors.push(element.id);
+                } else if(requiredIds.includes(element.id)) {
+                    let errorExist = element.parentNode.querySelector('p') || null;
+                    errorExist && errorExist.remove();
+                    errors = errors.filter((name) => name === element.id)
+                }
+            });
+            if(errors.length > 0) {
+                return;
+            }
+            let data = elements.reduce((data, element) => ({ ...data, [element.name]: data[element.name] ? [...(typeof data[element.name] === "string" ? [data[element.name]] : [...data[element.name]]), element.value.trim()]: element.value.trim() }), {});
+            console.log(data);
+
+            let MetaTags = {
+                'title': (title) => `<meta name="title" content="${title}">`,
+                'robots': (robots) => `<meta name="robots" content="${robots.join(', ')}">`,
+                'content': (content) => `<meta http-equiv="Content-Type" content="${content}">`,
+                'description': (description) => `<meta name="description" content="${description}">`,
+                'keywords': (keywords) => `<meta name="keywords" content="${keywords}">`,
+                'language': (language) => `<meta name="language" content="${language}">`,
+                'url': () => ``,
+                'default': () => `<meta name="revisit-after" content="1 days">\n<meta name="author" content="Author Name">`
+            };
+            let result = [];
+            for (let key in data) {
+                if(data[key].trim()) result.push(MetaTags[key](data[key]));
+            }
+            
+            output.value = result.join('\n');
+        }
+        form.addEventListener("submit", handleSubmit);
+    </script>
+</body>
+    
+</html>
