@@ -57,7 +57,7 @@
                                         htmlfor="grid-password">
                                         Site URL
                                     </label>
-                                    <input type="text" name="url" id="url"
+                                    <input type="url" name="url" id="url"
                                         class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                         value="">
                                 </div>
@@ -165,8 +165,8 @@
                         <div class="flex flex-wrap">
                             <div class="w-full lg:w-12/12 px-4">
                                 <div class="relative w-full mb-3">
-                                    <textarea type="text" readonly name="output" id="output"
-                                        class="border-0 px-2 py-2 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                    <textarea type="text" readonly name="output" id="output" wrap="off"
+                                        class="overflow-auto border-0 px-2 py-2 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                         rows="8"></textarea>
                                 </div>
                             </div>
@@ -192,8 +192,23 @@
         const form = document.getElementById("seo-form");
         const output= document.getElementById('output');
 
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        for (key in params) {
+            let elemPopulate = form.querySelector(`input[name="${key}"]`);
+            if(elemPopulate) {
+                elemPopulate.value = params[key];
+            }
+        }
+
         function oneLineTag(tag, options){
             return Object.assign(document.createElement(tag), options);
+        }
+
+        const generateMetaTags = (options = {}) => {
+            // <meta name="revisit-after" content="1 days">
+            let {title, robots, content, description, keywords, language, url} = options;
+            return `<meta charset="UTF-8">\n<meta http-equiv="X-UA-Compatible" content="IE=edge">\n<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">\n<meta name="theme-color" content="#000000">\n\n<!-- Primary Meta Tags -->\n<meta name="title" content="${title}">\n<meta name="description" content="${description}">\n<meta name="keywords" content="${typeof keywords === "string" ? keywords : keywords.join(", ")}">\n<meta name="language" content="${language}">\n\n<!-- Open Graph / Facebook -->\n<meta property="og:type" content="website">\n<meta property="og:url" content="${url}">\n<meta property="og:site_name" content="${title}">\n<meta property="og:title" content="${title}">\n<meta property="og:description" content="${description}">\n<meta property="og:image" content="https://sanjaygoraniya.github.io/img/og.png">\n<meta property="og:image:alt" content="Site Cover">\n\n<!-- Twitter -->\n<meta name="twitter:site" content="@sanjayrgoraniya">\n<meta name="twitter:title" content="${title}">\n<meta name="twitter:description" content="${description}">\n<meta name="twitter:image" content="https://sanjaygoraniya.github.io/img/og.png">\n<meta name="twitter:image:alt" content="Site Cover">\n<meta name="twitter:card" content="summary_large_image">\n<meta name="twitter:creator" content="@sanjayrgoraniya">\n\n<!-- Google+ -->\n<meta itemprop="name" content="${title}">\n<meta itemprop="description" content="${description}">\n<meta itemprop="image" content="https://sanjaygoraniya.github.io/img/og.png">\n\n<!-- Other -->\n<link rel="canonical" href="${url}">\n<meta name="robots" content="${typeof robots === "string" ? robots : robots.join(", ")},max-image-preview:large">\n<meta name="referrer" content="unsafe-url">\n<meta property="al:web:url" content="${url}">\n`;
         }
 
         const handleSubmit = (event) => {
@@ -221,26 +236,11 @@
             }
             let data = elements.reduce((data, element) => ({ ...data, [element.name]: data[element.name] ? [...(typeof data[element.name] === "string" ? [data[element.name]] : [...data[element.name]]), element.value.trim()]: element.value.trim() }), {});
             console.log(data);
-
-            let MetaTags = {
-                'title': (title) => `<meta name="title" content="${title}">`,
-                'robots': (robots) => `<meta name="robots" content="${robots.join(', ')}">`,
-                'content': (content) => `<meta http-equiv="Content-Type" content="${content}">`,
-                'description': (description) => `<meta name="description" content="${description}">`,
-                'keywords': (keywords) => `<meta name="keywords" content="${keywords}">`,
-                'language': (language) => `<meta name="language" content="${language}">`,
-                'url': () => ``,
-                'default': () => `<meta name="revisit-after" content="1 days">\n<meta name="author" content="Author Name">`
-            };
-            let result = [];
-            for (let key in data) {
-                if(data[key].trim()) result.push(MetaTags[key](data[key]));
-            }
             
-            output.value = result.join('\n');
+            output.value = generateMetaTags(data);
         }
         form.addEventListener("submit", handleSubmit);
     </script>
 </body>
-    
+
 </html>
