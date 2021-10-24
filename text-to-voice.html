@@ -10,10 +10,20 @@
 </head>
 
 <body>
-    <h1>Text to voice</h1>
-    <script defer>
-        
-    </script>
+  <input type="text" id="text">
+  <button id="speak">Speak</button>
+  <script type="text/javascript">
+    const text = document.getElementById('text');
+    const speakBtn = document.getElementById('speak');
+    const speak = (msg) => {
+      const sp = new SpeechSynthesisUtterance(msg);
+      [sp.voice] = speechSynthesis.getVoices();
+      speechSynthesis.speak(sp);
+    }
+    speakBtn.addEventListener('click', (e) => {
+      speak(text.value);
+    });
+  </script>
 </body>
 
 </html>
