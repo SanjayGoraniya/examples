@@ -1,1 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vibrate Phone Using JS | Sanjay Goraniya</title>
+    <link rel="icon" sizes="256x256" href="/favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html,
+        body {
+            background-color: #eee;
+            width: 100%;
+            height: 100%;
+        }
+        body,
+        .icon,
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container { flex-direction: column }
+        .text {
+            font-size: 2.25rem;
+            font-family: monospace;
+        }
+        button {
+            padding: .25rem .75rem;
+            margin-top: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="text">Click below button to make it vibrate...</div>
+        <button onclick="vibrateIt()">Vibrate</button>
+    </div>
+    <script>
+        function vibrateIt() {
+          navigator.vibrate(1000);
+        }
+    </script>
+</body>
+
+</html>
