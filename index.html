@@ -7,7 +7,8 @@
     <title>Examples | Sanjay Goraniya</title>
     <link rel="icon" sizes="256x256" href="./favicon.ico">
     
-    <meta name="description" content="List of things I've worked on" />
+    <meta name="description" content="Free browser-based tools and demos by Sanjay Goraniya: barcode scanner, calculators, counters, countdown timers, and more." />
+    <link rel="canonical" href="https://sanjaygoraniya.github.io/examples/" />
     <meta name="image" content="/img/og.png" />
     <meta name="robots" content="follow" />
     <meta name="robots" content="index" />
@@ -18,7 +19,7 @@
     <meta property="og:title" content="Examples | Sanjay Goraniya" />
     <meta property="og:description" content="List of things I've worked on" />
     <meta property="og:image" content="/img/og.png" />
-    <meta property="og:url" content="https://sanjaygoraniya.github.io/" />
+    <meta property="og:url" content="https://sanjaygoraniya.github.io/examples/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Sanjay Goraniya | Full Stack Software Engineer">
 
@@ -156,7 +157,21 @@
             font-size: 20px;
             font-weight: 400;
             color: var(--heading-text);
-            max-width: 450px;
+            max-width: 520px;
+        }
+
+        .archive td.title .tool-name {
+            display: block;
+        }
+
+        .archive td.title .tool-desc {
+            display: block;
+            margin: 6px 0 0;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.45;
+            color: #6a6a78;
+            font-family: var(--font-sans);
         }
 
         .archive td.company {
@@ -246,7 +261,7 @@
     <main>
         <header>
             <h1 class="big-heading">Examples</h1>
-            <p class="subtitle">List of things I've worked on</p>
+            <p class="subtitle">Small tools and front-end demos. Each one runs in the browser, no install.</p>
         </header>
         <section>
             <table class="archive">
@@ -259,7 +274,7 @@
                         <th>Link</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody itemscope itemtype="https://schema.org/ItemList">
                 </tbody>
             </table>
         </section>
@@ -297,6 +312,7 @@
         const archives = [{
             year: '2020',
             title: "Personal Website",
+            description: "My portfolio site: projects, notes, and how to reach me.",
             tech: ['HTML', 'SCSS', 'ReactJS'],
             file: '',
             links: [{
@@ -309,6 +325,7 @@
         }, {
             year: '2021',
             title: "Words & Characters Counter",
+            description: "Paste or type text and see word, character, and line counts update live.",
             tech: ['HTML', 'CSS', 'VanillaJS'],
             file: 'words-counter.html',
             links: [{
@@ -321,6 +338,7 @@
         }, {
             year: '2021',
             title: "Countdown Timer",
+            description: "Set a target date and time; the page counts down in real time.",
             tech: ['HTML', 'CSS', 'VanillaJS'],
             file: 'countdown.html',
             links: [{
@@ -333,6 +351,7 @@
         }, {
             year: '2021',
             title: "Countdown Timer With Web Components & More functionalities",
+            description: "Same countdown idea, rebuilt with custom elements plus pause and reset.",
             tech: ['HTML', 'CSS', 'VanillaJS'],
             file: 'countdown-web-components.html',
             links: [{
@@ -345,6 +364,7 @@
         }, {
             year: '2021',
             title: "Toggle Theme",
+            description: "Switch between light and dark; your choice is remembered in localStorage.",
             tech: ['HTML', 'CSS', 'VanillaJS'],
             file: 'toggle-theme.html',
             links: [{
@@ -357,6 +377,7 @@
         }, {
             year: '2021',
             title: "Percentage Calculator",
+            description: "Quick percentage math: find X% of a number or what percent one value is of another.",
             tech: ['HTML', 'CSS', 'VanillaJS'],
             file: 'percentage-calculator.html',
             links: [{
@@ -369,6 +390,7 @@
         }, {
             year: '2021',
             title: "Background Color Flipper",
+            description: "Hit a button, get a random page background. Early DOM practice piece.",
             tech: ['HTML', 'CSS', 'VanillaJS'],
             file: 'background-color-flipper.html',
             links: [{
@@ -381,6 +403,7 @@
         }, {
             year: '2021',
             title: "Game Controller Design",
+            description: "A gamepad layout drawn in CSS. Visual only, no actual game behind it.",
             tech: ['HTML', 'CSS', 'VanillaJS'],
             file: 'game-controller.html',
             links: [{
@@ -393,6 +416,7 @@
         }, {
             year: '2021',
             title: "Determine Internet Connectivity",
+            description: "Shows online or offline using the browser's connection events.",
             tech: ['HTML', 'CSS', 'VanillaJS'],
             file: 'determine-internet-connectivity.html',
             links: [{
@@ -405,6 +429,7 @@
         }, {
             year: '2021',
             title: "Counter",
+            description: "Increment and decrement a number with two buttons. Simple state demo.",
             tech: ['HTML', 'CSS', 'VanillaJS'],
             file: 'counter.html',
             links: [{
@@ -417,6 +442,7 @@
         }, {
             year: '2021',
             title: "Pure CSS Tooltip",
+            description: "Hover tooltips styled with CSS only, no JavaScript involved.",
             tech: ['HTML', 'CSS', 'VanillaJS'],
             file: 'pure-css-tooltip.html',
             links: [{
@@ -429,6 +455,7 @@
         }, {
             year: '2021',
             title: "Pure CSS Filled Arrows",
+            description: "Solid arrow shapes built from borders and transforms.",
             tech: ['HTML', 'CSS', 'VanillaJS'],
             file: 'pure-css-filled-arrows.html',
             links: [{
@@ -441,6 +468,7 @@
         }, {
             year: '2021',
             title: "Pure CSS Line Arrows",
+            description: "Outline arrows in a few directions, again without images or JS.",
             tech: ['HTML', 'CSS', 'VanillaJS'],
             file: 'pure-css-line-arrows.html',
             links: [{
@@ -453,6 +481,7 @@
         }, {
             year: '2021',
             title: "Todo List",
+            description: "Add tasks, mark them done, remove them. Tailwind for layout.",
             tech: ['HTML', 'Tailwind CSS', 'VanillaJS'],
             file: 'tailwind-todo-list.html',
             links: [{
@@ -465,6 +494,7 @@
         },{
             year: '2021',
             title: "Github repository language viewer",
+            description: "Enter a GitHub user/repo and see language percentages from the API.",
             tech: ['HTML', 'Tailwind CSS', 'VanillaJS'],
             file: 'repository-language-viewer.html',
             links: [{
@@ -477,6 +507,7 @@
         },{
             year: '2026',
             title: "Barcode to URL Redirector",
+            description: "Scan a barcode with your camera, then open a URL with the code slotted into your template.",
             tech: ['HTML', 'CSS', 'JS', 'html5-qrcode', 'localStorage'],
             file: 'barcode-redirect.html',
             links: [{
@@ -486,16 +517,136 @@
                 title: 'github',
                 url: '//github.com/SanjayGoraniya/examples/blob/main/{{file}}'
             }]
-        },]
-        
-        archives.reverse().forEach(({ year, title, company = '—', tech, file = '', links }, index) => {
-            let tr = document.createElement('tr');
+        },];
+
+        const EXAMPLES_BASE_URL = 'https://sanjaygoraniya.github.io/examples/';
+
+        function resolveArchiveLink(url, file) {
+            const path = url.replace('{{file}}', file);
+            if (path.startsWith('http://') || path.startsWith('https://')) {
+                return path;
+            }
+            if (path.startsWith('//')) {
+                return 'https:' + path;
+            }
+            if (path.startsWith('./')) {
+                return EXAMPLES_BASE_URL + path.slice(2);
+            }
+            return EXAMPLES_BASE_URL + path.replace(/^\//, '');
+        }
+
+        function getArchiveWebsiteUrl(item) {
+            const websiteLink = item.links.find((link) => link.title === 'website');
+            if (!websiteLink) {
+                return null;
+            }
+            return resolveArchiveLink(websiteLink.url, item.file || '');
+        }
+
+        function buildToolsJsonLd(items) {
+            const toolItems = items
+                .map((item) => {
+                    const url = getArchiveWebsiteUrl(item);
+                    if (!url) {
+                        return null;
+                    }
+                    return {
+                        '@type': 'ListItem',
+                        position: 0,
+                        item: {
+                            '@type': 'WebApplication',
+                            name: item.title,
+                            url: url,
+                            applicationCategory: 'UtilitiesApplication',
+                            operatingSystem: 'Any',
+                            browserRequirements: 'Requires JavaScript.',
+                            offers: {
+                                '@type': 'Offer',
+                                price: '0',
+                                priceCurrency: 'USD'
+                            },
+                            author: {
+                                '@type': 'Person',
+                                name: 'Sanjay Goraniya',
+                                url: 'https://sanjaygoraniya.github.io/'
+                            },
+                            keywords: item.tech.join(', '),
+                            ...(item.description ? { description: item.description } : {})
+                        }
+                    };
+                })
+                .filter(Boolean);
+
+            toolItems.forEach((entry, index) => {
+                entry.position = index + 1;
+            });
+
+            return {
+                '@context': 'https://schema.org',
+                '@graph': [
+                    {
+                        '@type': 'WebSite',
+                        '@id': EXAMPLES_BASE_URL + '#website',
+                        name: 'Examples by Sanjay Goraniya',
+                        url: EXAMPLES_BASE_URL,
+                        description: 'Browser tools and front-end demos by Sanjay Goraniya.',
+                        author: {
+                            '@type': 'Person',
+                            name: 'Sanjay Goraniya',
+                            url: 'https://sanjaygoraniya.github.io/'
+                        }
+                    },
+                    {
+                        '@type': 'CollectionPage',
+                        '@id': EXAMPLES_BASE_URL + '#webpage',
+                        url: EXAMPLES_BASE_URL,
+                        name: 'Examples | Sanjay Goraniya',
+                        description: 'Browser tools and UI demos: a barcode scanner, counters, timers, calculators, and a few CSS experiments.',
+                        isPartOf: { '@id': EXAMPLES_BASE_URL + '#website' },
+                        inLanguage: 'en',
+                        mainEntity: {
+                            '@type': 'ItemList',
+                            name: 'Web tools and demos',
+                            numberOfItems: toolItems.length,
+                            itemListElement: toolItems
+                        }
+                    }
+                ]
+            };
+        }
+
+        (function injectToolsJsonLd() {
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.textContent = JSON.stringify(buildToolsJsonLd(archives));
+            document.head.appendChild(script);
+        })();
+
+        archives.reverse().forEach((item, index) => {
+            const { year, title, description = '', company = '—', tech, file = '', links } = item;
+            const tr = document.createElement('tr');
+            tr.setAttribute('itemprop', 'itemListElement');
+            tr.setAttribute('itemscope', '');
+            tr.setAttribute('itemtype', 'https://schema.org/WebApplication');
+
+            const descMarkup = description
+                ? `<p class="tool-desc" itemprop="description">${description}</p>`
+                : '';
+
+            const linksHtml = links.map(({ title: linkTitle, url }) => {
+                const href = resolveArchiveLink(url, file);
+                const urlProp = linkTitle === 'website' ? ' itemprop="url"' : '';
+                return `<a href="${href}"${urlProp} target="_blank" rel="noopener" aria-label="${linkTitle}"><my-icon name="${linkTitle}"></my-icon></a>`;
+            }).join('');
+
             tr.innerHTML = `
+                <meta itemprop="applicationCategory" content="UtilitiesApplication">
+                <meta itemprop="operatingSystem" content="Any">
                 <td class="year">${year}</td>
-                <td class="title">${title}</td>
+                <td class="title"><span class="tool-name" itemprop="name">${title}</span>${descMarkup}</td>
                 <td class="company hide-on-mobile">${company}</td>
-                <td class="tech hide-on-mobile">${tech.map((t) => `<span class="with-separator">${t}</span>`).join('')}</td>
-                <td class="links"><div>${links.map(({ title: t, url: u }) => `<a href="${u.replace('{{file}}', file)}" target="_blank" aria-label="${t}"><my-icon name="${t}"></my-icon></a>`).join('')}</div></td>
+                <td class="tech hide-on-mobile" itemprop="keywords">${tech.map((t) => `<span class="with-separator">${t}</span>`).join('')}</td>
+                <td class="links"><div>${linksHtml}</div></td>
             `
             tableEl.append(tr);
         });
