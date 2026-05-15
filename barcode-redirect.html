@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Scan barcodes and QR codes with your camera, then open a URL with the scanned value filled in. Runs in your browser; settings stay on your device.">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Barcode to URL Redirector | Sanjay Goraniya</title>
+  <link rel="icon" sizes="256x256" href="/favicon.ico">
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg: #f3f5fa;
+      --surface: #ffffff;
+      --border: #dbe4f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --success: #059669;
+      --danger: #b91c1c;
+      --danger-bg: #fef2f2;
+      --shadow: 0 1px 0 rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.06);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(37, 99, 235, 0.12), transparent),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    main {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: max(20px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom));
+    }
+
+    .header {
+      margin-bottom: 16px;
+    }
+
+    .header h1 {
+      margin: 0 0 6px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .header p {
+      margin: 0;
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      margin: 0 0 4px;
+      font-size: 0.9375rem;
+      font-weight: 600;
+    }
+
+    .card-hint {
+      margin: 0 0 12px;
+      font-size: 0.8125rem;
+      color: var(--muted);
+    }
+
+    #reader {
+      min-height: 280px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+    }
+
+    #reader video {
+      border-radius: 10px;
+    }
+
+    #reader__scan_region {
+      border-radius: 10px;
+    }
+
+    #reader img[alt="Info icon"],
+    #reader__dashboard_section_csr span {
+      color: var(--muted);
+    }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.8125rem;
+      color: #334155;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      flex-shrink: 0;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .status-dot.idle { background: #94a3b8; animation: none; }
+    .status-dot.scanning { background: var(--success); }
+    .status-dot.error { background: var(--danger); animation: none; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.45; }
+    }
+
+    label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 0.875rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      background: #fff;
+      color: var(--text);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    input[type="text"]::placeholder {
+      color: #64748b;
+      opacity: 1;
+    }
+
+    .tpl-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .tpl-input-row input[type="text"] {
+      flex: 1;
+      min-width: 0;
+    }
+
+    button.icon-btn {
+      flex-shrink: 0;
+      width: 44px;
+      height: auto;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      color: var(--accent);
+      border: 1px solid #cbd5e1;
+    }
+
+    button.icon-btn:hover {
+      background: #eff6ff;
+      border-color: #93c5fd;
+      color: var(--accent-hover);
+    }
+
+    button.icon-btn svg {
+      display: block;
+    }
+
+    .tpl-input-hint {
+      margin: 6px 0 0;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .tpl-label-name {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .preview {
+      margin-top: 8px;
+      padding: 8px 10px;
+      background: #f1f5f9;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      color: #475569;
+      word-break: break-all;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .preview strong { color: #334155; font-weight: 600; }
+
+    .preview.muted span { color: #94a3b8; font-style: italic; }
+
+    code {
+      font-size: 0.8125rem;
+      background: #e2e8f0;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    button {
+      font: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    button.primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    button.primary:hover { background: var(--accent-hover); }
+
+    button.secondary {
+      background: #fff;
+      color: #334155;
+      border-color: #cbd5e1;
+    }
+
+    button.secondary:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+    }
+
+    button.danger {
+      background: #fff;
+      color: var(--danger);
+      border-color: #fecaca;
+    }
+
+    button.danger:hover {
+      background: var(--danger-bg);
+      border-color: #f87171;
+    }
+
+    button.ghost {
+      background: transparent;
+      color: var(--muted);
+      border-color: transparent;
+      padding: 6px 10px;
+      font-size: 0.8125rem;
+    }
+
+    button.ghost:hover {
+      background: #f1f5f9;
+      color: var(--text);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .header-actions {
+      margin-top: 12px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 16px;
+      padding-bottom: max(16px, env(safe-area-inset-bottom));
+      background: rgba(15, 23, 42, 0.45);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    @media (min-width: 520px) {
+      .modal-overlay {
+        align-items: center;
+      }
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 440px;
+      max-height: min(85vh, 640px);
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 24px 48px rgba(15, 23, 42, 0.18);
+      transform: translateY(16px);
+      transition: transform 0.2s ease;
+    }
+
+    .modal-overlay.open .modal {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1.0625rem;
+      font-weight: 700;
+    }
+
+    .modal-header p {
+      margin: 4px 0 0;
+      font-size: 0.8125rem;
+      color: var(--muted);
+    }
+
+    .modal-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 12px 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .scan-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 8px;
+      background: #fafbfc;
+    }
+
+    .scan-item-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .scan-barcode {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.875rem;
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    .scan-meta {
+      margin-top: 4px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .scan-url {
+      display: block;
+      margin-top: 4px;
+      font-size: 0.6875rem;
+      color: #475569;
+      word-break: break-all;
+    }
+
+    .scan-empty {
+      padding: 24px 12px;
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+
+    .tpl-lib-item {
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 8px;
+      background: #fafbfc;
+    }
+
+    .tpl-lib-section {
+      margin: 12px 0 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+
+    .tpl-lib-section:first-child {
+      margin-top: 0;
+    }
+
+    .tpl-lib-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .tpl-lib-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .tpl-lib-badge {
+      font-size: 0.625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+
+    .tpl-lib-url {
+      font-size: 0.6875rem;
+      color: #475569;
+      word-break: break-all;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      margin-bottom: 8px;
+    }
+
+    .tpl-lib-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tpl-lib-actions button {
+      padding: 6px 10px;
+      font-size: 0.75rem;
+    }
+
+    .modal-form {
+      padding: 12px 16px 16px;
+      border-top: 1px solid var(--border);
+      background: #f8fafc;
+    }
+
+    .modal-form .field {
+      margin-bottom: 10px;
+    }
+
+    .modal-form .field:last-of-type {
+      margin-bottom: 12px;
+    }
+
+    .modal-form label {
+      margin-bottom: 4px;
+    }
+
+    .tpl-pick-item {
+      width: 100%;
+      text-align: left;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 8px;
+      background: #fafbfc;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+    }
+
+    .tpl-pick-item:hover {
+      border-color: #93c5fd;
+      background: #f8fafc;
+    }
+
+    .tpl-pick-item.selected {
+      border-color: var(--accent);
+      background: #eff6ff;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+
+    .pick-save-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 0 16px 12px;
+      padding: 10px 12px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.8125rem;
+      color: #334155;
+      cursor: pointer;
+    }
+
+    .pick-save-row input {
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .pick-modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0 16px 16px;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: max(20px, env(safe-area-inset-bottom));
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #0f172a;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      z-index: 100;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .error-box {
+      padding: 12px 14px;
+      background: var(--danger-bg);
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+      color: var(--danger);
+      font-size: 0.875rem;
+      text-align: left;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-top: 8px;
+    }
+
+    .help-list {
+      margin: 0;
+      padding-left: 1.15rem;
+      font-size: 0.8125rem;
+      color: var(--muted);
+    }
+
+    .help-list li {
+      margin-bottom: 8px;
+    }
+
+    .help-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .help-example {
+      display: block;
+      margin-top: 4px;
+      padding: 8px 10px;
+      background: #f1f5f9;
+      border-radius: 8px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.6875rem;
+      color: #475569;
+      word-break: break-all;
+    }
+
+    .help-more {
+      margin-top: 12px;
+      font-size: 0.8125rem;
+      color: var(--muted);
+    }
+
+    .help-more summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .help-more[open] summary {
+      margin-bottom: 8px;
+    }
+
+    .help-more p {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="header">
+      <h1>Barcode scanner</h1>
+      <p>Scan a barcode or QR code, then open your URL in a new tab with the code filled in.</p>
+      <div class="header-actions">
+        <button type="button" class="secondary" id="historyBtn" aria-haspopup="dialog">
+          Scan history (<span id="historyCount">0</span>)
+        </button>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2 class="card-title">Camera</h2>
+      <p class="card-hint">Allow camera access when prompted. Point at the barcode until it opens your link in a new tab.</p>
+      <div id="reader"></div>
+      <div class="status-bar" id="statusBar">
+        <span class="status-dot idle" id="statusDot"></span>
+        <span id="statusText">Waiting for scanner…</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">Open after scan</h2>
+      <p class="card-hint">Saved in this browser only (<code>localStorage</code>).</p>
+      <label for="tpl" id="tplLabel">URL template<span id="tplLabelName" class="tpl-label-name"></span></label>
+      <div class="tpl-input-row">
+        <input
+          type="text"
+          id="tpl"
+          value=""
+          placeholder="https://example.com/search?barcode={scannedBarcode}"
+          autocomplete="off"
+          spellcheck="false"
+          inputmode="url"
+        >
+        <button
+          type="button"
+          class="icon-btn"
+          id="copyShareLinkBtn"
+          title="Copy template share link"
+          aria-label="Copy template share link"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+          </svg>
+        </button>
+      </div>
+      <p class="tpl-input-hint">Link icon — copy a shareable scanner link with this template pre-filled.</p>
+      <div class="preview" id="preview">
+        <strong>Example:</strong> <span id="previewUrl">—</span>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="secondary" id="openTemplatesBtn">Templates</button>
+        <button type="button" class="primary" id="saveBtn">Save configuration</button>
+        <button type="button" class="secondary" id="testBtn">Test with sample code</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">How it works</h2>
+      <ol class="help-list">
+        <li>
+          Enter the web page you want to open after each scan in <strong>URL template</strong>.
+        </li>
+        <li>
+          Where the barcode number should go, type <code>{scannedBarcode}</code>.
+          <span class="help-example">https://example.com/search?barcode={scannedBarcode}</span>
+        </li>
+        <li>
+          Tap <strong>Templates</strong> to pick a saved URL pattern, or <strong>Save configuration</strong>, then scan.
+        </li>
+      </ol>
+      <details class="help-more">
+        <summary>What if I don’t use {scannedBarcode}?</summary>
+        <p>
+          The tool adds <code>?code=</code> and the scanned value to the end of your URL automatically
+          (or <code>&amp;code=</code> if your URL already has a <code>?</code>).
+        </p>
+      </details>
+      <details class="help-more">
+        <summary>Advanced: share a link with the URL already filled in</summary>
+        <p>
+          After entering your URL template, tap the <strong>link icon</strong> beside the field to copy a template share link.
+          Anyone who opens that link gets your template pre-filled on this scanner page.
+        </p>
+      </details>
+    </section>
+
+    <footer>Runs entirely in your browser. Settings are stored only on this device.</footer>
+  </main>
+
+  <div id="templatesModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="templatesModalTitle" hidden>
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h2 id="templatesModalTitle">URL templates</h2>
+          <p>Built-in templates cannot be edited. Add your own below; CSV only affects your templates.</p>
+        </div>
+        <button type="button" class="ghost" id="closeTemplatesBtn" aria-label="Close">Close</button>
+      </div>
+      <div class="modal-toolbar">
+        <button type="button" class="secondary" id="downloadTemplatesCsvBtn">Download CSV</button>
+        <button type="button" class="secondary" id="uploadTemplatesCsvBtn">Upload CSV</button>
+        <input type="file" id="templatesCsvFile" accept=".csv,text/csv" hidden>
+      </div>
+      <div class="modal-list" id="templatesList"></div>
+      <div class="modal-form">
+        <div class="field">
+          <label for="tplLibName">Name</label>
+          <input type="text" id="tplLibName" placeholder="e.g. Product search" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="tplLibUrl">Template URL</label>
+          <input type="text" id="tplLibUrl" placeholder="https://example.com/search?barcode={scannedBarcode}" autocomplete="off">
+        </div>
+        <div class="btn-row" style="margin-top: 0;">
+          <button type="button" class="primary" id="saveTemplateLibBtn">Add template</button>
+          <button type="button" class="secondary" id="cancelEditTemplateBtn" hidden>Cancel edit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="pickTemplateModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="pickTemplateModalTitle" hidden>
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h2 id="pickTemplateModalTitle">Choose a template</h2>
+          <p>No URL template is set. Pick one to open for barcode <strong id="pickScanCode"></strong>.</p>
+        </div>
+        <button type="button" class="ghost" id="closePickTemplateBtn" aria-label="Close">Close</button>
+      </div>
+      <div class="modal-list" id="pickTemplateList"></div>
+      <label class="pick-save-row">
+        <input type="checkbox" id="pickSaveAsTemplate">
+        <span>Use selected template as URL template for future scans</span>
+      </label>
+      <div class="pick-modal-actions">
+        <button type="button" class="primary" id="pickOpenBtn" disabled>Open in new tab</button>
+        <button type="button" class="secondary" id="pickCancelBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="historyModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="historyModalTitle" hidden>
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h2 id="historyModalTitle">Scan history</h2>
+          <p>Stored on this device only. Download or clear when done.</p>
+        </div>
+        <button type="button" class="ghost" id="closeHistoryBtn" aria-label="Close">Close</button>
+      </div>
+      <div class="modal-toolbar">
+        <button type="button" class="secondary" id="downloadCsvBtn">Download CSV</button>
+        <button type="button" class="danger" id="clearHistoryBtn">Clear all</button>
+      </div>
+      <div class="modal-list" id="historyList"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status">Configuration saved</div>
+
+  <script>
+    const tplIn = document.getElementById('tpl');
+    const previewUrl = document.getElementById('previewUrl');
+    const statusText = document.getElementById('statusText');
+    const statusDot = document.getElementById('statusDot');
+    const toast = document.getElementById('toast');
+    const STORAGE_KEY = 'bc_tpl';
+    const LEGACY_LIBRARY_KEY = 'bc_tpl_library';
+    const CUSTOM_LIBRARY_KEY = 'bc_tpl_custom';
+    const SCANS_KEY = 'bc_scans';
+    const MAX_SCANS = 500;
+    const MAX_LIBRARY = 200;
+    const EXAMPLE_TEMPLATE = 'https://example.com/search?barcode={scannedBarcode}';
+    const SAMPLE_CODE = '5012345678901';
+
+    const historyModal = document.getElementById('historyModal');
+    const historyList = document.getElementById('historyList');
+    const historyCount = document.getElementById('historyCount');
+    const downloadCsvBtn = document.getElementById('downloadCsvBtn');
+    const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+
+    const templatesModal = document.getElementById('templatesModal');
+    const templatesList = document.getElementById('templatesList');
+    const tplLibName = document.getElementById('tplLibName');
+    const tplLibUrl = document.getElementById('tplLibUrl');
+    const saveTemplateLibBtn = document.getElementById('saveTemplateLibBtn');
+    const cancelEditTemplateBtn = document.getElementById('cancelEditTemplateBtn');
+
+    const pickTemplateModal = document.getElementById('pickTemplateModal');
+    const pickTemplateList = document.getElementById('pickTemplateList');
+    const pickScanCode = document.getElementById('pickScanCode');
+    const pickSaveAsTemplate = document.getElementById('pickSaveAsTemplate');
+    const pickOpenBtn = document.getElementById('pickOpenBtn');
+    let pendingScanCode = '';
+    let selectedPickTemplate = null;
+
+    const templatesCsvFile = document.getElementById('templatesCsvFile');
+
+    const DEFAULT_LIBRARY = [
+      { id: 'default-upc-item-db', name: 'UPC Item DB', url: 'https://www.upcitemdb.com/upc/{scannedBarcode}' },
+      { id: 'default-barcode-lookup', name: 'Barcode Lookup', url: 'https://www.barcodelookup.com/{scannedBarcode}' },
+      { id: 'default-go-upc', name: 'GO-UPC', url: 'https://go-upc.com/search?q={scannedBarcode}' },
+      { id: 'default-ean-search', name: 'EAN Search', url: 'https://www.ean-search.org/?q={scannedBarcode}' },
+      { id: 'default-google', name: 'Google', url: 'https://www.google.com/search?q={scannedBarcode}' },
+      { id: 'default-duckduckgo', name: 'DuckDuckGo', url: 'https://duckduckgo.com/?q={scannedBarcode}' },
+      { id: 'default-bing', name: 'Bing', url: 'https://www.bing.com/search?q={scannedBarcode}' },
+      { id: 'default-brave', name: 'Brave Search', url: 'https://search.brave.com/search?q={scannedBarcode}' }
+    ];
+
+    let scanner = null;
+    let editingTemplateId = null;
+    let toastTimer = null;
+    let lastOpened = { code: '', at: 0 };
+    const OPEN_COOLDOWN_MS = 2500;
+
+    function isDevTemplate(url) {
+      try {
+        const host = new URL(url).hostname;
+        return host === 'localhost' || host === '127.0.0.1' || host.endsWith('.local');
+      } catch {
+        return false;
+      }
+    }
+
+    function isAllowedTemplate(url) {
+      try {
+        const protocol = new URL(url).protocol;
+        return protocol === 'http:' || protocol === 'https:';
+      } catch {
+        return false;
+      }
+    }
+
+    function getTemplateFromQuery() {
+      const params = new URLSearchParams(window.location.search);
+      for (const key of ['tpl', 'template']) {
+        const value = params.get(key);
+        if (value && value.trim()) {
+          return value.trim();
+        }
+      }
+      return '';
+    }
+
+    function applyTemplate(value, { persist, allowDev } = { persist: false, allowDev: false }) {
+      const tpl = String(value || '').trim();
+      if (!tpl) {
+        return false;
+      }
+      if (!isAllowedTemplate(tpl)) {
+        return false;
+      }
+      if (!allowDev && isDevTemplate(tpl)) {
+        return false;
+      }
+      tplIn.value = tpl;
+      if (persist) {
+        localStorage.setItem(STORAGE_KEY, tpl);
+      }
+      return true;
+    }
+
+    const fromQuery = getTemplateFromQuery();
+    const saved = localStorage.getItem(STORAGE_KEY);
+    let loadedFromQuery = false;
+
+    if (fromQuery) {
+      if (applyTemplate(fromQuery, { persist: true, allowDev: true })) {
+        loadedFromQuery = true;
+      }
+    } else if (saved && !isDevTemplate(saved)) {
+      tplIn.value = saved;
+    } else if (saved && isDevTemplate(saved)) {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+
+    function getTemplate() {
+      return (tplIn.value || localStorage.getItem(STORAGE_KEY) || '').trim();
+    }
+
+    function buildTargetUrl(code, template) {
+      const tpl = (template ?? getTemplate()).trim();
+      if (!tpl) {
+        return '';
+      }
+      if (!tpl.includes('{scannedBarcode}')) {
+        return tpl + (tpl.includes('?') ? '&' : '?') + 'code=' + encodeURIComponent(code);
+      }
+      return tpl.replace(/\{scannedBarcode\}/g, encodeURIComponent(code));
+    }
+
+    function findTemplateByUrl(url) {
+      const u = String(url || '').trim();
+      if (!u) {
+        return null;
+      }
+      return loadTemplateLibrary().find((t) => String(t.url || '').trim() === u) || null;
+    }
+
+    function updateTemplateLabel() {
+      const el = document.getElementById('tplLabelName');
+      const tpl = getTemplate();
+      if (!tpl) {
+        el.textContent = '';
+        return;
+      }
+      const match = findTemplateByUrl(tpl);
+      el.textContent = match ? ' — ' + match.name : '';
+    }
+
+    function updatePreview() {
+      const template = getTemplate() || EXAMPLE_TEMPLATE;
+      previewUrl.textContent = buildTargetUrl(SAMPLE_CODE, template);
+      updateTemplateLabel();
+    }
+
+    function setStatus(mode, text) {
+      statusText.textContent = text;
+      statusDot.className = 'status-dot';
+      if (mode === 'scanning') {
+        statusDot.classList.add('scanning');
+      } else if (mode === 'idle') {
+        statusDot.classList.add('idle');
+      } else if (mode === 'error') {
+        statusDot.classList.add('error');
+      }
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function newScanId() {
+      if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+        return crypto.randomUUID();
+      }
+      return String(Date.now()) + '-' + Math.random().toString(36).slice(2, 9);
+    }
+
+    function loadScans() {
+      try {
+        const raw = localStorage.getItem(SCANS_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveScans(scans) {
+      localStorage.setItem(SCANS_KEY, JSON.stringify(scans.slice(0, MAX_SCANS)));
+      updateHistoryCount();
+    }
+
+    function formatScanTime(iso) {
+      try {
+        return new Date(iso).toLocaleString();
+      } catch {
+        return iso;
+      }
+    }
+
+    function updateHistoryCount() {
+      const n = loadScans().length;
+      historyCount.textContent = String(n);
+      downloadCsvBtn.disabled = n === 0;
+      clearHistoryBtn.disabled = n === 0;
+    }
+
+    function addScanRecord(barcode, openedUrl) {
+      const scans = loadScans();
+      scans.unshift({
+        id: newScanId(),
+        barcode,
+        openedUrl,
+        scannedAt: new Date().toISOString()
+      });
+      saveScans(scans);
+    }
+
+    function deleteScan(id) {
+      saveScans(loadScans().filter((s) => s.id !== id));
+      renderScanHistory();
+      showToast('Scan removed');
+    }
+
+    function clearAllScans() {
+      if (!loadScans().length) {
+        return;
+      }
+      if (!confirm('Delete all saved scans on this device?')) {
+        return;
+      }
+      localStorage.removeItem(SCANS_KEY);
+      updateHistoryCount();
+      renderScanHistory();
+      showToast('History cleared');
+    }
+
+    function escapeCsvField(value) {
+      const s = String(value ?? '');
+      if (/[",\n\r]/.test(s)) {
+        return '"' + s.replace(/"/g, '""') + '"';
+      }
+      return s;
+    }
+
+    function downloadScansCsv() {
+      const scans = loadScans();
+      if (!scans.length) {
+        showToast('No scans to export');
+        return;
+      }
+      const header = 'barcode,opened_url,scanned_at';
+      const rows = scans.map((s) =>
+        [escapeCsvField(s.barcode), escapeCsvField(s.openedUrl), escapeCsvField(s.scannedAt)].join(',')
+      );
+      const csv = [header, ...rows].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const stamp = new Date().toISOString().slice(0, 10);
+      a.href = url;
+      a.download = 'barcode-scans-' + stamp + '.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('CSV downloaded');
+    }
+
+    function renderScanHistory() {
+      const scans = loadScans();
+      if (!scans.length) {
+        historyList.innerHTML = '<p class="scan-empty">No scans yet. Successful scans appear here.</p>';
+        return;
+      }
+      historyList.innerHTML = scans.map((s) => {
+        const time = formatScanTime(s.scannedAt);
+        const url = s.openedUrl ? '<span class="scan-url">' + escapeHtml(s.openedUrl) + '</span>' : '';
+        return (
+          '<article class="scan-item" data-id="' + escapeHtml(s.id) + '">' +
+            '<div class="scan-item-body">' +
+              '<div class="scan-barcode">' + escapeHtml(s.barcode) + '</div>' +
+              '<div class="scan-meta">' + escapeHtml(time) + '</div>' +
+              url +
+            '</div>' +
+            '<button type="button" class="ghost scan-delete-btn" data-id="' + escapeHtml(s.id) + '" aria-label="Delete scan">Delete</button>' +
+          '</article>'
+        );
+      }).join('');
+
+      historyList.querySelectorAll('.scan-delete-btn').forEach((btn) => {
+        btn.addEventListener('click', () => deleteScan(btn.getAttribute('data-id')));
+      });
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function openHistoryModal() {
+      renderScanHistory();
+      historyModal.hidden = false;
+      historyModal.classList.add('open');
+      document.body.classList.add('modal-open');
+      document.getElementById('closeHistoryBtn').focus();
+    }
+
+    function closeHistoryModal() {
+      historyModal.classList.remove('open');
+      historyModal.hidden = true;
+      document.body.classList.remove('modal-open');
+      document.getElementById('historyBtn').focus();
+    }
+
+    function getDefaultTemplates() {
+      return DEFAULT_LIBRARY.map((item) => ({
+        id: item.id,
+        name: item.name,
+        url: item.url,
+        default: true
+      }));
+    }
+
+    function isDefaultTemplate(item) {
+      return item && (item.default === true || String(item.id || '').startsWith('default-'));
+    }
+
+    function isDefaultTemplateUrl(url) {
+      const u = String(url || '').trim();
+      return DEFAULT_LIBRARY.some((d) => d.url === u);
+    }
+
+    function migrateLegacyLibrary() {
+      const raw = localStorage.getItem(LEGACY_LIBRARY_KEY);
+      if (!raw) {
+        return;
+      }
+      try {
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) {
+          return;
+        }
+        const custom = parsed
+          .filter((item) => item && item.url && !isDefaultTemplate(item) && !isDefaultTemplateUrl(item.url))
+          .map((item) => ({
+            id: item.id || newScanId(),
+            name: item.name || 'Custom template',
+            url: item.url,
+            default: false
+          }));
+        if (custom.length) {
+          saveCustomTemplates(custom);
+        }
+      } catch {
+        /* ignore */
+      }
+      localStorage.removeItem(LEGACY_LIBRARY_KEY);
+      localStorage.removeItem('bc_tpl_library_meta');
+    }
+
+    function loadCustomTemplates() {
+      migrateLegacyLibrary();
+      try {
+        const raw = localStorage.getItem(CUSTOM_LIBRARY_KEY);
+        if (!raw) {
+          return [];
+        }
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) {
+          return [];
+        }
+        return parsed
+          .filter((item) => item && item.url && !isDefaultTemplate(item) && !isDefaultTemplateUrl(item.url))
+          .map((item) => ({
+            id: item.id || newScanId(),
+            name: item.name || 'Custom template',
+            url: item.url,
+            default: false
+          }));
+      } catch {
+        return [];
+      }
+    }
+
+    function saveCustomTemplates(items) {
+      const customOnly = items
+        .filter((item) => item && item.url && !isDefaultTemplate(item) && !isDefaultTemplateUrl(item.url))
+        .map((item) => ({
+          id: item.id || newScanId(),
+          name: item.name || 'Custom template',
+          url: item.url,
+          default: false
+        }));
+      localStorage.setItem(CUSTOM_LIBRARY_KEY, JSON.stringify(customOnly.slice(0, MAX_LIBRARY)));
+    }
+
+    function loadTemplateLibrary() {
+      return getDefaultTemplates().concat(loadCustomTemplates());
+    }
+
+    function findTemplateById(id) {
+      return loadTemplateLibrary().find((t) => t.id === id);
+    }
+
+    function setActiveTemplate(url, { toastMessage, templateName } = {}) {
+      const tpl = String(url || '').trim();
+      if (!tpl) {
+        updateTemplateLabel();
+        return false;
+      }
+      tplIn.value = tpl;
+      localStorage.setItem(STORAGE_KEY, tpl);
+      updatePreview();
+      if (templateName) {
+        document.getElementById('tplLabelName').textContent = ' — ' + templateName;
+      }
+      if (toastMessage) {
+        showToast(toastMessage);
+      }
+      return true;
+    }
+
+    function resetTemplateForm() {
+      editingTemplateId = null;
+      tplLibName.value = '';
+      tplLibUrl.value = '';
+      saveTemplateLibBtn.textContent = 'Add template';
+      cancelEditTemplateBtn.hidden = true;
+    }
+
+    function startEditTemplate(item) {
+      if (isDefaultTemplate(item)) {
+        showToast('Built-in templates cannot be edited');
+        return;
+      }
+      editingTemplateId = item.id;
+      tplLibName.value = item.name || '';
+      tplLibUrl.value = item.url || '';
+      saveTemplateLibBtn.textContent = 'Save changes';
+      cancelEditTemplateBtn.hidden = false;
+      tplLibName.focus();
+    }
+
+    function loadTemplateFromLibrary(id) {
+      const item = findTemplateById(id);
+      if (!item) {
+        showToast('Template not found');
+        return;
+      }
+      setActiveTemplate(item.url, { templateName: item.name, toastMessage: 'Template loaded and saved' });
+      closeTemplatesModal();
+    }
+
+    function deleteTemplateFromLibrary(id) {
+      const item = findTemplateById(id);
+      if (!item || isDefaultTemplate(item)) {
+        showToast('Built-in templates cannot be deleted');
+        return;
+      }
+      saveCustomTemplates(loadCustomTemplates().filter((t) => t.id !== id));
+      if (editingTemplateId === id) {
+        resetTemplateForm();
+      }
+      renderTemplateLibrary();
+      showToast('Template removed');
+    }
+
+    function saveTemplateToLibrary() {
+      const name = tplLibName.value.trim();
+      const url = tplLibUrl.value.trim();
+      if (!name) {
+        showToast('Enter a template name');
+        tplLibName.focus();
+        return;
+      }
+      if (!url) {
+        showToast('Enter a template URL');
+        tplLibUrl.focus();
+        return;
+      }
+      if (isDefaultTemplateUrl(url)) {
+        showToast('That URL is already a built-in template — use Load instead');
+        return;
+      }
+      let items = loadCustomTemplates();
+      if (editingTemplateId) {
+        const existing = findTemplateById(editingTemplateId);
+        if (!existing || isDefaultTemplate(existing)) {
+          showToast('Built-in templates cannot be edited');
+          resetTemplateForm();
+          return;
+        }
+        items = items.map((t) =>
+          t.id === editingTemplateId ? { ...t, name, url, default: false } : t
+        );
+        saveCustomTemplates(items);
+        resetTemplateForm();
+        renderTemplateLibrary();
+        showToast('Template updated');
+        return;
+      }
+      items.push({ id: newScanId(), name, url, default: false });
+      saveCustomTemplates(items);
+      resetTemplateForm();
+      renderTemplateLibrary();
+      showToast('Template added');
+    }
+
+    function renderTemplateLibrary() {
+      const defaults = getDefaultTemplates();
+      const custom = loadCustomTemplates();
+      let html = '<h3 class="tpl-lib-section">Built-in</h3>';
+      html += defaults.map(renderTemplateItem).join('');
+      html += '<h3 class="tpl-lib-section">Your templates</h3>';
+      if (!custom.length) {
+        html += '<p class="scan-empty">No custom templates yet. Add one below or import CSV.</p>';
+      } else {
+        html += custom.map(renderTemplateItem).join('');
+      }
+      templatesList.innerHTML = html;
+      bindTemplateListEvents();
+    }
+
+    function renderTemplateItem(item) {
+      const isDefault = isDefaultTemplate(item);
+      const badge = isDefault ? '<span class="tpl-lib-badge">Default</span>' : '';
+      let actions =
+        '<button type="button" class="primary tpl-load-btn" data-id="' + escapeHtml(item.id) + '">Load</button>';
+      if (!isDefault) {
+        actions +=
+          '<button type="button" class="secondary tpl-edit-btn" data-id="' + escapeHtml(item.id) + '">Edit</button>' +
+          '<button type="button" class="danger tpl-delete-btn" data-id="' + escapeHtml(item.id) + '">Delete</button>';
+      }
+      return (
+        '<article class="tpl-lib-item" data-id="' + escapeHtml(item.id) + '">' +
+          '<div class="tpl-lib-name-row">' +
+            '<div class="tpl-lib-name">' + escapeHtml(item.name || 'Untitled') + '</div>' +
+            badge +
+          '</div>' +
+          '<div class="tpl-lib-url">' + escapeHtml(item.url) + '</div>' +
+          '<div class="tpl-lib-actions">' + actions + '</div>' +
+        '</article>'
+      );
+    }
+
+    function bindTemplateListEvents() {
+      const allItems = loadTemplateLibrary();
+      templatesList.querySelectorAll('.tpl-load-btn').forEach((btn) => {
+        btn.addEventListener('click', () => loadTemplateFromLibrary(btn.getAttribute('data-id')));
+      });
+      templatesList.querySelectorAll('.tpl-edit-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const item = allItems.find((t) => t.id === btn.getAttribute('data-id'));
+          if (item) {
+            startEditTemplate(item);
+          }
+        });
+      });
+      templatesList.querySelectorAll('.tpl-delete-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (confirm('Delete this template from your list?')) {
+            deleteTemplateFromLibrary(btn.getAttribute('data-id'));
+          }
+        });
+      });
+    }
+
+    function isCsvDefaultFlag(value) {
+      const v = String(value || '').trim().toLowerCase();
+      return v === 'true' || v === '1' || v === 'yes';
+    }
+
+    function parseCsvLine(line) {
+      const out = [];
+      let cur = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') {
+          if (inQuotes && line[i + 1] === '"') {
+            cur += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (ch === ',' && !inQuotes) {
+          out.push(cur);
+          cur = '';
+        } else {
+          cur += ch;
+        }
+      }
+      out.push(cur);
+      return out.map((s) => s.trim());
+    }
+
+    function parseTemplatesCsv(text) {
+      const lines = String(text || '').trim().split(/\r?\n/).filter((l) => l.trim());
+      if (!lines.length) {
+        return [];
+      }
+      const rows = lines.map(parseCsvLine);
+      const first = rows[0].map((c) => c.toLowerCase());
+      let start = 0;
+      let nameIdx = 0;
+      let urlIdx = 1;
+      let defaultIdx = -1;
+      if (first.includes('name') && (first.includes('template_url') || first.includes('url'))) {
+        start = 1;
+        nameIdx = first.indexOf('name');
+        urlIdx = first.includes('template_url') ? first.indexOf('template_url') : first.indexOf('url');
+        defaultIdx = first.indexOf('default');
+      }
+      const parsed = [];
+      for (let i = start; i < rows.length; i++) {
+        const row = rows[i];
+        if (defaultIdx >= 0 && isCsvDefaultFlag(row[defaultIdx])) {
+          continue;
+        }
+        const name = row[nameIdx] || ('Template ' + (i + 1));
+        const url = row[urlIdx] || row[1] || '';
+        if (!url || isDefaultTemplateUrl(url)) {
+          continue;
+        }
+        parsed.push({ name, url });
+      }
+      return parsed;
+    }
+
+    function downloadTemplatesCsv() {
+      const defaults = getDefaultTemplates();
+      const custom = loadCustomTemplates();
+      const header = 'name,template_url,default';
+      const defaultRows = defaults.map((t) =>
+        [escapeCsvField(t.name), escapeCsvField(t.url), 'true'].join(',')
+      );
+      const customRows = custom.map((t) =>
+        [escapeCsvField(t.name), escapeCsvField(t.url), 'false'].join(',')
+      );
+      const csv = [header, ...defaultRows, ...customRows].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'url-templates.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Templates CSV downloaded');
+    }
+
+    function importTemplatesCsv(file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const incoming = parseTemplatesCsv(reader.result);
+        if (!incoming.length) {
+          showToast('No custom templates found in CSV (default rows are skipped)');
+          return;
+        }
+        const replace = confirm(
+          'Import ' + incoming.length + ' custom template(s).\n\nOK = replace your custom templates\nCancel = add to your custom templates\n\nBuilt-in templates are never changed.'
+        );
+        const mapped = incoming.map((row) => ({
+          id: newScanId(),
+          name: row.name,
+          url: row.url,
+          default: false
+        }));
+        const merged = replace ? mapped : mapped.concat(loadCustomTemplates());
+        saveCustomTemplates(merged);
+        renderTemplateLibrary();
+        showToast(replace ? 'Custom templates replaced from CSV' : 'Custom templates added from CSV');
+      };
+      reader.onerror = () => showToast('Could not read CSV file');
+      reader.readAsText(file);
+    }
+
+    function openTemplatesModal() {
+      resetTemplateForm();
+      renderTemplateLibrary();
+      templatesModal.hidden = false;
+      templatesModal.classList.add('open');
+      document.body.classList.add('modal-open');
+      document.getElementById('closeTemplatesBtn').focus();
+    }
+
+    function closeTemplatesModal() {
+      templatesModal.classList.remove('open');
+      templatesModal.hidden = true;
+      resetTemplateForm();
+      if (!historyModal.classList.contains('open')) {
+        document.body.classList.remove('modal-open');
+      }
+      document.getElementById('openTemplatesBtn').focus();
+    }
+
+    function getScannerBaseUrl() {
+      return window.location.origin + window.location.pathname;
+    }
+
+    function buildShareLink(template) {
+      return getScannerBaseUrl() + '?tpl=' + encodeURIComponent(String(template).trim());
+    }
+
+    async function copyShareLink() {
+      const template = tplIn.value.trim();
+      if (!template) {
+        showToast('Enter a URL template first');
+        tplIn.focus();
+        return;
+      }
+      const link = buildShareLink(template);
+      try {
+        await navigator.clipboard.writeText(link);
+        showToast('Template share link copied');
+      } catch {
+        window.prompt('Copy this template share link:', link);
+      }
+    }
+
+    function saveCfg() {
+      const v = tplIn.value.trim();
+      if (!v) {
+        showToast('Enter a URL template first');
+        return;
+      }
+      localStorage.setItem(STORAGE_KEY, v);
+      showToast('Configuration saved');
+      updatePreview();
+    }
+
+    function openUrlInNewTab(code, templateUrl, options) {
+      const opts = options || {};
+      const now = Date.now();
+      if (!opts.skipCooldown && code === lastOpened.code && now - lastOpened.at < OPEN_COOLDOWN_MS) {
+        return false;
+      }
+
+      const targetUrl = buildTargetUrl(code, templateUrl);
+      const tab = window.open(targetUrl, '_blank');
+      if (!tab) {
+        showToast('Popup blocked — allow popups for this site');
+        setStatus('error', 'Could not open new tab');
+        return false;
+      }
+      tab.opener = null;
+
+      lastOpened = { code, at: now };
+      addScanRecord(code, targetUrl);
+      if (opts.saveAsTemplate) {
+        setActiveTemplate(templateUrl, {
+          templateName: opts.templateName,
+          toastMessage: 'Template saved for future scans'
+        });
+      }
+      setStatus('scanning', 'Opened in new tab: ' + code);
+      showToast('Opened in new tab');
+      return true;
+    }
+
+    function renderPickTemplateList() {
+      const items = loadTemplateLibrary();
+      if (!items.length) {
+        pickTemplateList.innerHTML = '<p class="scan-empty">No templates available.</p>';
+        return;
+      }
+      pickTemplateList.innerHTML = items.map((item) => (
+        '<button type="button" class="tpl-pick-item" data-id="' + escapeHtml(item.id) + '">' +
+          '<div class="tpl-lib-name-row">' +
+            '<div class="tpl-lib-name">' + escapeHtml(item.name || 'Untitled') + '</div>' +
+            (isDefaultTemplate(item) ? '<span class="tpl-lib-badge">Default</span>' : '') +
+          '</div>' +
+          '<div class="tpl-lib-url">' + escapeHtml(item.url) + '</div>' +
+        '</button>'
+      )).join('');
+
+      pickTemplateList.querySelectorAll('.tpl-pick-item').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          selectedPickTemplate = findTemplateById(btn.getAttribute('data-id'));
+          pickTemplateList.querySelectorAll('.tpl-pick-item').forEach((el) => {
+            el.classList.toggle('selected', el === btn);
+          });
+          pickOpenBtn.disabled = !selectedPickTemplate;
+        });
+      });
+    }
+
+    function openPickTemplateModal(code) {
+      pendingScanCode = code;
+      selectedPickTemplate = null;
+      pickSaveAsTemplate.checked = false;
+      pickScanCode.textContent = code;
+      pickOpenBtn.disabled = true;
+      renderPickTemplateList();
+      pickTemplateModal.hidden = false;
+      pickTemplateModal.classList.add('open');
+      document.body.classList.add('modal-open');
+      setStatus('idle', 'Choose a template for this scan');
+      document.getElementById('closePickTemplateBtn').focus();
+    }
+
+    function closePickTemplateModal() {
+      pickTemplateModal.classList.remove('open');
+      pickTemplateModal.hidden = true;
+      pendingScanCode = '';
+      selectedPickTemplate = null;
+      if (!templatesModal.classList.contains('open') && !historyModal.classList.contains('open')) {
+        document.body.classList.remove('modal-open');
+      }
+      setStatus('scanning', 'Ready — point camera at barcode');
+    }
+
+    function confirmPickTemplate() {
+      if (!pendingScanCode || !selectedPickTemplate) {
+        showToast('Select a template first');
+        return;
+      }
+      const saveAsTemplate = pickSaveAsTemplate.checked;
+      const templateUrl = selectedPickTemplate.url;
+      const code = pendingScanCode;
+      closePickTemplateModal();
+      openUrlInNewTab(code, templateUrl, {
+        saveAsTemplate,
+        templateName: selectedPickTemplate.name,
+        skipCooldown: true
+      });
+    }
+
+    function openInNewTab(code) {
+      const template = getTemplate();
+      if (!template) {
+        openPickTemplateModal(code);
+        return;
+      }
+      openUrlInNewTab(code, template, {});
+    }
+
+    function onScanSuccess(txt) {
+      const code = String(txt || '').trim();
+      if (!code) {
+        return;
+      }
+      openInNewTab(code);
+    }
+
+    function onScanFailure() {
+      /* Called every frame while searching — no UI noise. */
+    }
+
+    tplIn.addEventListener('input', updatePreview);
+    document.getElementById('historyBtn').addEventListener('click', openHistoryModal);
+    document.getElementById('closeHistoryBtn').addEventListener('click', closeHistoryModal);
+    downloadCsvBtn.addEventListener('click', downloadScansCsv);
+    clearHistoryBtn.addEventListener('click', clearAllScans);
+    historyModal.addEventListener('click', (e) => {
+      if (e.target === historyModal) {
+        closeHistoryModal();
+      }
+    });
+    document.getElementById('closePickTemplateBtn').addEventListener('click', closePickTemplateModal);
+    document.getElementById('pickCancelBtn').addEventListener('click', closePickTemplateModal);
+    document.getElementById('pickOpenBtn').addEventListener('click', confirmPickTemplate);
+    pickTemplateModal.addEventListener('click', (e) => {
+      if (e.target === pickTemplateModal) {
+        closePickTemplateModal();
+      }
+    });
+
+    document.getElementById('openTemplatesBtn').addEventListener('click', openTemplatesModal);
+    document.getElementById('closeTemplatesBtn').addEventListener('click', closeTemplatesModal);
+    document.getElementById('downloadTemplatesCsvBtn').addEventListener('click', downloadTemplatesCsv);
+    document.getElementById('uploadTemplatesCsvBtn').addEventListener('click', () => templatesCsvFile.click());
+    templatesCsvFile.addEventListener('change', () => {
+      const file = templatesCsvFile.files && templatesCsvFile.files[0];
+      if (file) {
+        importTemplatesCsv(file);
+      }
+      templatesCsvFile.value = '';
+    });
+    saveTemplateLibBtn.addEventListener('click', saveTemplateToLibrary);
+    cancelEditTemplateBtn.addEventListener('click', resetTemplateForm);
+    templatesModal.addEventListener('click', (e) => {
+      if (e.target === templatesModal) {
+        closeTemplatesModal();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') {
+        return;
+      }
+      if (pickTemplateModal.classList.contains('open')) {
+        closePickTemplateModal();
+      } else if (templatesModal.classList.contains('open')) {
+        closeTemplatesModal();
+      } else if (historyModal.classList.contains('open')) {
+        closeHistoryModal();
+      }
+    });
+
+    document.getElementById('saveBtn').addEventListener('click', saveCfg);
+    document.getElementById('copyShareLinkBtn').addEventListener('click', copyShareLink);
+    document.getElementById('testBtn').addEventListener('click', () => {
+      if (confirm('Open a new tab with sample barcode ' + SAMPLE_CODE + '?')) {
+        openInNewTab(SAMPLE_CODE);
+      }
+    });
+
+    updatePreview();
+    updateHistoryCount();
+
+    if (fromQuery && !loadedFromQuery) {
+      showToast('Invalid ?tpl= URL — use a full https:// link (URL-encoded)');
+    } else if (loadedFromQuery) {
+      showToast('Template loaded from link');
+    }
+
+    if (!window.isSecureContext) {
+      document.getElementById('reader').innerHTML =
+        '<div class="error-box">Camera access requires HTTPS. Host this page on GitHub Pages or another HTTPS site to use the scanner.</div>';
+      setStatus('error', 'HTTPS required for camera');
+    } else if (typeof Html5QrcodeScanner === 'undefined') {
+      document.getElementById('reader').innerHTML =
+        '<div class="error-box">Scanner library failed to load. Check your network or disable ad blockers for unpkg.com.</div>';
+      setStatus('error', 'Library not loaded');
+    } else {
+      scanner = new Html5QrcodeScanner('reader', {
+        fps: 12,
+        qrbox: (viewfinderWidth, viewfinderHeight) => {
+          const w = Math.min(280, Math.floor(viewfinderWidth * 0.85));
+          const h = Math.min(140, Math.floor(viewfinderHeight * 0.45));
+          return { width: w, height: h };
+        },
+        rememberLastUsedCamera: true,
+        aspectRatio: 1.5
+      });
+      scanner.render(onScanSuccess, onScanFailure);
+      setStatus('scanning', 'Ready — point camera at barcode');
+    }
+  </script>
+</body>
+</html>
