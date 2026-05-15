@@ -554,22 +554,12 @@
                         '@type': 'ListItem',
                         position: 0,
                         item: {
-                            '@type': 'WebApplication',
+                            '@type': 'WebPage',
+                            '@id': url + '#webpage',
                             name: item.title,
                             url: url,
-                            applicationCategory: 'UtilitiesApplication',
-                            operatingSystem: 'Any',
-                            browserRequirements: 'Requires JavaScript.',
-                            offers: {
-                                '@type': 'Offer',
-                                price: '0',
-                                priceCurrency: 'USD'
-                            },
-                            author: {
-                                '@type': 'Person',
-                                name: 'Sanjay Goraniya',
-                                url: 'https://sanjaygoraniya.github.io/'
-                            },
+                            inLanguage: 'en',
+                            isPartOf: { '@id': EXAMPLES_BASE_URL + '#website' },
                             keywords: item.tech.join(', '),
                             ...(item.description ? { description: item.description } : {})
                         }
@@ -601,7 +591,7 @@
                         '@id': EXAMPLES_BASE_URL + '#webpage',
                         url: EXAMPLES_BASE_URL,
                         name: 'Examples | Sanjay Goraniya',
-                        description: 'Browser tools and UI demos: a barcode scanner, counters, timers, calculators, and a few CSS experiments.',
+                        description: 'A catalog of free browser tools and front-end demos: barcode scanner, counters, timers, calculators, and CSS experiments.',
                         isPartOf: { '@id': EXAMPLES_BASE_URL + '#website' },
                         inLanguage: 'en',
                         mainEntity: {
@@ -627,7 +617,7 @@
             const tr = document.createElement('tr');
             tr.setAttribute('itemprop', 'itemListElement');
             tr.setAttribute('itemscope', '');
-            tr.setAttribute('itemtype', 'https://schema.org/WebApplication');
+            tr.setAttribute('itemtype', 'https://schema.org/WebPage');
 
             const descMarkup = description
                 ? `<p class="tool-desc" itemprop="description">${description}</p>`
@@ -640,8 +630,6 @@
             }).join('');
 
             tr.innerHTML = `
-                <meta itemprop="applicationCategory" content="UtilitiesApplication">
-                <meta itemprop="operatingSystem" content="Any">
                 <td class="year">${year}</td>
                 <td class="title"><span class="tool-name" itemprop="name">${title}</span>${descMarkup}</td>
                 <td class="company hide-on-mobile">${company}</td>
