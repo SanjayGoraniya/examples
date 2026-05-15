@@ -82,25 +82,199 @@
       color: var(--muted);
     }
 
-    #reader {
-      min-height: 280px;
+    .card-camera #reader {
+      height: 392px;
+      min-height: 392px;
       border-radius: 10px;
       overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-camera #reader__scan_region {
+      flex: 0 0 240px;
+      height: 240px;
+      min-height: 240px;
+      max-height: 240px;
       background: #0f172a;
-      border: 1px solid #1e293b;
+      border-radius: 10px 10px 0 0;
+      overflow: hidden;
+      position: relative;
     }
 
-    #reader video {
+    .card-camera #reader__scan_region video {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover;
+      border-radius: 0;
+    }
+
+    .card-camera #reader__scan_region .html5-qrcode-element[type="button"] {
+      display: none !important;
+    }
+
+    .card-camera #reader__dashboard {
+      flex: 1 1 auto;
+      min-height: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-camera #reader__dashboard_section {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      padding: 0 !important;
+    }
+
+    .card-camera #reader__dashboard_section_csr {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 12px;
+      padding: 14px !important;
+      text-align: left !important;
+      min-height: 128px;
+    }
+
+    #reader__dashboard_section_csr > span {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 6px;
+      margin-right: 0 !important;
+      width: 100%;
+    }
+
+    #reader__dashboard_section_csr > span:has(#html5-qrcode-select-camera) {
+      margin: 0;
+    }
+
+    .scanner-field-label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #334155;
+      line-height: 1.3;
+    }
+
+    #html5-qrcode-select-camera {
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding: 10px 12px;
+      font: inherit;
+      font-size: 0.875rem;
+      color: var(--text);
+      background: #fff;
+      border: 1px solid #cbd5e1;
       border-radius: 10px;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
     }
 
-    #reader__scan_region {
+    #html5-qrcode-select-camera:focus {
+      outline: none;
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    #html5-qrcode-select-camera:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .scanner-camera-row {
+      flex: 0 0 auto;
+      min-height: 76px;
+    }
+
+    .scanner-actions {
+      position: relative;
+      flex: 0 0 44px;
+      height: 44px;
+      width: 100%;
+    }
+
+    .scanner-actions .html5-qrcode-element[type="button"] {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      width: 100% !important;
+      margin: 0 !important;
+    }
+
+    .scanner-actions .html5-qrcode-element.scanner-btn-off {
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    #reader .html5-qrcode-element[type="button"] {
+      font: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 10px 16px;
       border-radius: 10px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, opacity 0.15s, visibility 0.15s;
+      margin: 0;
     }
 
-    #reader img[alt="Info icon"],
-    #reader__dashboard_section_csr span {
-      color: var(--muted);
+    #html5-qrcode-button-camera-start,
+    #html5-qrcode-button-camera-permission {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    #html5-qrcode-button-camera-start:hover:not(:disabled),
+    #html5-qrcode-button-camera-permission:hover:not(:disabled) {
+      background: var(--accent-hover);
+    }
+
+    #html5-qrcode-button-camera-stop {
+      background: #fff;
+      color: #334155;
+      border-color: #cbd5e1;
+    }
+
+    #html5-qrcode-button-camera-stop:hover:not(:disabled) {
+      background: #f8fafc;
+      border-color: #94a3b8;
+    }
+
+    #reader .html5-qrcode-element[type="button"]:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    #reader img[alt="Info icon"] {
+      filter: brightness(0) invert(1);
+      opacity: 0.7;
+    }
+
+    #reader__dashboard_section_fsr,
+    #reader__dashboard_section_swaplink {
+      padding: 0 14px 14px;
+      font-size: 0.8125rem;
+    }
+
+    #reader__header_message {
+      margin: 0 14px 10px !important;
+      border-radius: 8px !important;
+      font-size: 0.8125rem !important;
     }
 
     .status-bar {
@@ -196,6 +370,27 @@
 
     button.icon-btn svg {
       display: block;
+    }
+
+    button.icon-btn-inline {
+      width: 28px;
+      height: 28px;
+      min-height: 28px;
+      border-radius: 6px;
+      vertical-align: middle;
+    }
+
+    button.icon-btn-inline svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .help-placeholder-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      vertical-align: middle;
+      white-space: nowrap;
     }
 
     .tpl-input-hint {
@@ -562,9 +757,9 @@
 
     .toast {
       position: fixed;
-      bottom: max(20px, env(safe-area-inset-bottom));
+      top: max(20px, env(safe-area-inset-top));
       left: 50%;
-      transform: translateX(-50%) translateY(80px);
+      transform: translateX(-50%) translateY(-80px);
       background: #0f172a;
       color: #fff;
       padding: 10px 18px;
@@ -581,6 +776,22 @@
     .toast.show {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.toast-error {
+      background: #7f1d1d;
+    }
+
+    .scan-error-detail {
+      margin: 0;
+      padding: 12px 14px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.8125rem;
+      color: #334155;
+      word-break: break-word;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     }
 
     .error-box {
@@ -660,7 +871,7 @@
       </div>
     </header>
 
-    <section class="card">
+    <section class="card card-camera">
       <h2 class="card-title">Camera</h2>
       <p class="card-hint">Allow camera access when prompted. Point at the barcode until it opens your link in a new tab.</p>
       <div id="reader"></div>
@@ -715,7 +926,22 @@
           Enter the web page you want to open after each scan in <strong>URL template</strong>.
         </li>
         <li>
-          Where the barcode number should go, type <code>{scannedBarcode}</code>.
+          Where the barcode number should go, type
+          <span class="help-placeholder-row">
+            <code>{scannedBarcode}</code>
+            <button
+              type="button"
+              class="icon-btn icon-btn-inline"
+              id="copyPlaceholderBtn"
+              title="Copy {scannedBarcode}"
+              aria-label="Copy {scannedBarcode} placeholder"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+            </button>
+          </span>.
           <span class="help-example">https://example.com/search?barcode={scannedBarcode}</span>
         </li>
         <li>
@@ -814,6 +1040,24 @@
 
   <div id="toast" class="toast" role="status">Configuration saved</div>
 
+  <div id="scanErrorModal" class="modal-overlay" role="alertdialog" aria-modal="true" aria-labelledby="scanErrorModalTitle" hidden>
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h2 id="scanErrorModalTitle">Scan failed</h2>
+          <p id="scanErrorModalSummary">Something went wrong while scanning.</p>
+        </div>
+        <button type="button" class="ghost" id="closeScanErrorBtn" aria-label="Close">Close</button>
+      </div>
+      <div style="padding: 0 16px 16px;">
+        <p class="scan-error-detail" id="scanErrorDetail"></p>
+        <div class="btn-row" style="margin-top: 12px;">
+          <button type="button" class="primary" id="dismissScanErrorBtn">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const tplIn = document.getElementById('tpl');
     const previewUrl = document.getElementById('previewUrl');
@@ -821,12 +1065,12 @@
     const statusDot = document.getElementById('statusDot');
     const toast = document.getElementById('toast');
     const STORAGE_KEY = 'bc_tpl';
-    const LEGACY_LIBRARY_KEY = 'bc_tpl_library';
     const CUSTOM_LIBRARY_KEY = 'bc_tpl_custom';
     const SCANS_KEY = 'bc_scans';
     const MAX_SCANS = 500;
     const MAX_LIBRARY = 200;
-    const EXAMPLE_TEMPLATE = 'https://example.com/search?barcode={scannedBarcode}';
+    const SCANNED_BARCODE_PLACEHOLDER = '{scannedBarcode}';
+    const EXAMPLE_TEMPLATE = 'https://example.com/search?barcode=' + SCANNED_BARCODE_PLACEHOLDER;
     const SAMPLE_CODE = '5012345678901';
 
     const historyModal = document.getElementById('historyModal');
@@ -852,6 +1096,10 @@
 
     const templatesCsvFile = document.getElementById('templatesCsvFile');
 
+    const scanErrorModal = document.getElementById('scanErrorModal');
+    const scanErrorModalSummary = document.getElementById('scanErrorModalSummary');
+    const scanErrorDetail = document.getElementById('scanErrorDetail');
+
     const DEFAULT_LIBRARY = [
       { id: 'default-upc-item-db', name: 'UPC Item DB', url: 'https://www.upcitemdb.com/upc/{scannedBarcode}' },
       { id: 'default-barcode-lookup', name: 'Barcode Lookup', url: 'https://www.barcodelookup.com/{scannedBarcode}' },
@@ -866,8 +1114,11 @@
     let scanner = null;
     let editingTemplateId = null;
     let toastTimer = null;
+    let handlingScan = false;
     let lastOpened = { code: '', at: 0 };
+    let lastScanErrorShown = { key: '', at: 0 };
     const OPEN_COOLDOWN_MS = 2500;
+    const SCAN_ERROR_THROTTLE_MS = 5000;
 
     function isDevTemplate(url) {
       try {
@@ -982,11 +1233,353 @@
       }
     }
 
-    function showToast(message) {
+    function showToast(message, { isError = false } = {}) {
       toast.textContent = message;
+      toast.classList.toggle('toast-error', isError);
       toast.classList.add('show');
       clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+        toast.classList.remove('toast-error');
+      }, 2200);
+    }
+
+    function scanErrorText(error, errorDetails) {
+      const parts = [];
+      if (error != null) {
+        parts.push(String(error));
+        if (typeof error === 'object') {
+          if (error.message) {
+            parts.push(String(error.message));
+          }
+          if (error.name) {
+            parts.push(String(error.name));
+          }
+          if (typeof error.getKind === 'function') {
+            parts.push(String(error.getKind()));
+          } else if (error.constructor && error.constructor.kind) {
+            parts.push(String(error.constructor.kind));
+          }
+        }
+      }
+      if (errorDetails?.errorMessage) {
+        parts.push(String(errorDetails.errorMessage));
+      }
+      return parts.join(' ');
+    }
+
+    function isRoutineScanError(error, errorDetails) {
+      const combined = scanErrorText(error, errorDetails);
+      if (!combined.trim()) {
+        return true;
+      }
+      if (/^qr code parse error/i.test(combined)) {
+        return true;
+      }
+      return /NotFoundException|No MultiFormat Readers|were unable to detect|unable to detect the code|No barcode|No QR code/i.test(combined);
+    }
+
+    function formatScanFailureReason(error, errorDetails) {
+      const raw = scanErrorText(error, errorDetails).trim() || String(error ?? errorDetails?.errorMessage ?? '').trim();
+      const lower = raw.toLowerCase();
+
+      if (isRoutineScanError(error, errorDetails)) {
+        return null;
+      }
+      if (/checksumexception|checksum/i.test(raw)) {
+        return {
+          summary: 'Barcode detected but could not be verified',
+          detail: 'The code was seen but failed a checksum. Hold the camera steady, improve lighting, and try again.'
+        };
+      }
+      if (/formatexception|format error/i.test(raw)) {
+        return {
+          summary: 'Barcode format not recognized',
+          detail: 'Move closer, keep the code flat in frame, and ensure the full barcode is visible.'
+        };
+      }
+      if (/permission|notallowed|denied/i.test(lower)) {
+        return {
+          summary: 'Camera permission denied',
+          detail: 'Allow camera access in your browser settings, then reload this page and start scanning again.'
+        };
+      }
+      if (/notfounderror|no camera|devices not found|no devices/i.test(lower)) {
+        return {
+          summary: 'No camera found',
+          detail: 'Connect a camera or use a device with a rear camera, then reload the page.'
+        };
+      }
+      if (/notreadable|in use|busy|trackstart/i.test(lower)) {
+        return {
+          summary: 'Camera is unavailable',
+          detail: 'Another app may be using the camera. Close other apps that use the camera and try again.'
+        };
+      }
+      if (/overconstrained|constraint/i.test(lower)) {
+        return {
+          summary: 'Camera settings not supported',
+          detail: 'Try another camera from the scanner dropdown, or reload on a different device.'
+        };
+      }
+      if (/failed to load|network|unpkg|library/i.test(lower)) {
+        return {
+          summary: 'Scanner library failed to load',
+          detail: 'Check your internet connection and disable blockers for unpkg.com, then reload the page.'
+        };
+      }
+      if (/https|secure context|getusermedia/i.test(lower)) {
+        return {
+          summary: 'Camera requires a secure connection',
+          detail: 'Open this page over HTTPS (for example GitHub Pages), not as a local file or HTTP URL.'
+        };
+      }
+      if (/scan file|image.*scan|could not scan.*image/i.test(lower)) {
+        return {
+          summary: 'Could not read code from image',
+          detail: raw || 'Use a clearer photo with the full barcode or QR code in frame.'
+        };
+      }
+
+      const cleaned = raw.replace(/^QR code parse error,\s*error\s*=\s*/i, '').trim();
+      return {
+        summary: 'Scan error',
+        detail: cleaned || 'An unexpected error occurred while scanning. Try again with better lighting.'
+      };
+    }
+
+    function openScanErrorModal(summary, detail) {
+      scanErrorModalSummary.textContent = summary;
+      scanErrorDetail.textContent = detail;
+      scanErrorModal.hidden = false;
+      scanErrorModal.classList.add('open');
+      document.body.classList.add('modal-open');
+      setStatus('error', summary);
+      document.getElementById('dismissScanErrorBtn').focus();
+    }
+
+    function closeScanErrorModal() {
+      scanErrorModal.classList.remove('open');
+      scanErrorModal.hidden = true;
+      if (!templatesModal.classList.contains('open') &&
+          !historyModal.classList.contains('open') &&
+          !pickTemplateModal.classList.contains('open')) {
+        document.body.classList.remove('modal-open');
+      }
+      if (scanner) {
+        setStatus('scanning', 'Ready — point camera at barcode');
+      }
+    }
+
+    function stopActiveScan() {
+      const stopBtn = document.getElementById('html5-qrcode-button-camera-stop');
+      if (stopBtn && stopBtn.style.display !== 'none' && !stopBtn.disabled) {
+        stopBtn.click();
+      }
+    }
+
+    function isScannerBtnHidden(btn) {
+      const style = btn.getAttribute('style') || '';
+      return /\bdisplay:\s*none\b/i.test(style);
+    }
+
+    function syncScannerActionButtons() {
+      const startBtn = document.getElementById('html5-qrcode-button-camera-start');
+      const stopBtn = document.getElementById('html5-qrcode-button-camera-stop');
+      if (!startBtn || !stopBtn) {
+        return;
+      }
+      const btnWrap = startBtn.parentElement;
+      if (btnWrap && btnWrap.tagName === 'SPAN') {
+        btnWrap.classList.add('scanner-actions');
+      }
+      startBtn.classList.toggle('scanner-btn-off', isScannerBtnHidden(startBtn));
+      stopBtn.classList.toggle('scanner-btn-off', isScannerBtnHidden(stopBtn));
+    }
+
+    let polishScannerScheduled = false;
+    let scannerButtonObserver = null;
+
+    function polishScannerControls() {
+      const select = document.getElementById('html5-qrcode-select-camera');
+      if (select?.parentElement && select.parentElement.dataset.polished !== '1') {
+        const wrap = select.parentElement;
+        const count = select.options.length;
+        wrap.dataset.polished = '1';
+        wrap.classList.add('scanner-camera-row');
+        if (!wrap.querySelector('.scanner-field-label')) {
+          [...wrap.childNodes].forEach((child) => {
+            if (child.nodeType === Node.TEXT_NODE) {
+              child.remove();
+            }
+          });
+          const label = document.createElement('label');
+          label.className = 'scanner-field-label';
+          label.htmlFor = select.id;
+          label.textContent = count > 1 ? 'Camera (' + count + ' available)' : 'Camera';
+          wrap.insertBefore(label, select);
+        }
+      }
+      attachScannerButtonObserver();
+      clearStuckPermissionHeader();
+    }
+
+    function clearStuckPermissionHeader() {
+      const header = document.getElementById('reader__header_message');
+      const select = document.getElementById('html5-qrcode-select-camera');
+      if (
+        header &&
+        select &&
+        header.style.display !== 'none' &&
+        /requesting camera permissions/i.test(header.textContent || '')
+      ) {
+        header.style.display = 'none';
+      }
+    }
+
+    function attachScannerButtonObserver() {
+      const startBtn = document.getElementById('html5-qrcode-button-camera-start');
+      const stopBtn = document.getElementById('html5-qrcode-button-camera-stop');
+      if (!startBtn || !stopBtn) {
+        return;
+      }
+      syncScannerActionButtons();
+      if (scannerButtonObserver) {
+        return;
+      }
+      scannerButtonObserver = new MutationObserver(() => syncScannerActionButtons());
+      scannerButtonObserver.observe(startBtn, { attributes: true, attributeFilter: ['style'] });
+      scannerButtonObserver.observe(stopBtn, { attributes: true, attributeFilter: ['style'] });
+    }
+
+    function schedulePolishScannerControls() {
+      if (polishScannerScheduled) {
+        return;
+      }
+      polishScannerScheduled = true;
+      requestAnimationFrame(() => {
+        polishScannerScheduled = false;
+        try {
+          polishScannerControls();
+          schedulePermissionRecoveryCheck();
+        } catch (err) {
+          console.warn('Scanner UI polish failed:', err);
+        }
+      });
+    }
+
+    function watchScannerUi() {
+      const reader = document.getElementById('reader');
+      if (!reader) {
+        return;
+      }
+      const obs = new MutationObserver((mutations) => {
+        let shouldPolish = false;
+        for (const mutation of mutations) {
+          if (mutation.type !== 'childList') {
+            continue;
+          }
+          for (const node of mutation.addedNodes) {
+            if (node.nodeType !== 1) {
+              continue;
+            }
+            const el = node;
+            if (
+              el.id === 'html5-qrcode-select-camera' ||
+              el.id === 'html5-qrcode-button-camera-start' ||
+              el.id === 'html5-qrcode-button-camera-stop' ||
+              el.id === 'reader__header_message' ||
+              el.querySelector?.('#html5-qrcode-select-camera') ||
+              el.querySelector?.('#html5-qrcode-button-camera-start')
+            ) {
+              shouldPolish = true;
+              break;
+            }
+          }
+          if (shouldPolish) {
+            break;
+          }
+        }
+        if (shouldPolish) {
+          schedulePolishScannerControls();
+        }
+        observePermissionHeader();
+        schedulePermissionRecoveryCheck();
+      });
+      obs.observe(reader, { childList: true, subtree: true });
+      observePermissionHeader();
+    }
+
+    function observePermissionHeader() {
+      const header = document.getElementById('reader__header_message');
+      if (!header || header.dataset.recoveryObserved === '1') {
+        return;
+      }
+      header.dataset.recoveryObserved = '1';
+      const headerObs = new MutationObserver(() => schedulePermissionRecoveryCheck());
+      headerObs.observe(header, {
+        attributes: true,
+        attributeFilter: ['style'],
+        childList: true,
+        characterData: true,
+        subtree: true
+      });
+    }
+
+    function schedulePermissionRecoveryCheck() {
+      const header = document.getElementById('reader__header_message');
+      if (!header || header.style.display === 'none') {
+        return;
+      }
+      if (!/requesting camera permissions/i.test(header.textContent || '')) {
+        return;
+      }
+      if (document.getElementById('html5-qrcode-select-camera')) {
+        clearStuckPermissionHeader();
+        return;
+      }
+      if (header.dataset.recoveryScheduled === '1') {
+        return;
+      }
+      header.dataset.recoveryScheduled = '1';
+      setTimeout(async () => {
+        delete header.dataset.recoveryScheduled;
+        if (document.getElementById('html5-qrcode-select-camera')) {
+          clearStuckPermissionHeader();
+          return;
+        }
+        const permBtn = document.getElementById('html5-qrcode-button-camera-permission');
+        if (!permBtn?.disabled) {
+          return;
+        }
+        try {
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          const hasLabeledCamera = devices.some((d) => d.kind === 'videoinput' && d.label);
+          if (hasLabeledCamera) {
+            permBtn.disabled = false;
+            permBtn.click();
+          }
+        } catch (_) {
+          /* ignore */
+        }
+      }, 2000);
+    }
+
+    function reportScanFailure(error, errorDetails) {
+      if (isRoutineScanError(error, errorDetails)) {
+        return;
+      }
+      const formatted = formatScanFailureReason(error, errorDetails);
+      if (!formatted) {
+        return;
+      }
+      const key = formatted.summary + '|' + formatted.detail;
+      const now = Date.now();
+      if (key === lastScanErrorShown.key && now - lastScanErrorShown.at < SCAN_ERROR_THROTTLE_MS) {
+        return;
+      }
+      lastScanErrorShown = { key, at: now };
+      openScanErrorModal(formatted.summary, formatted.detail);
     }
 
     function newScanId() {
@@ -1153,36 +1746,7 @@
       return DEFAULT_LIBRARY.some((d) => d.url === u);
     }
 
-    function migrateLegacyLibrary() {
-      const raw = localStorage.getItem(LEGACY_LIBRARY_KEY);
-      if (!raw) {
-        return;
-      }
-      try {
-        const parsed = JSON.parse(raw);
-        if (!Array.isArray(parsed)) {
-          return;
-        }
-        const custom = parsed
-          .filter((item) => item && item.url && !isDefaultTemplate(item) && !isDefaultTemplateUrl(item.url))
-          .map((item) => ({
-            id: item.id || newScanId(),
-            name: item.name || 'Custom template',
-            url: item.url,
-            default: false
-          }));
-        if (custom.length) {
-          saveCustomTemplates(custom);
-        }
-      } catch {
-        /* ignore */
-      }
-      localStorage.removeItem(LEGACY_LIBRARY_KEY);
-      localStorage.removeItem('bc_tpl_library_meta');
-    }
-
     function loadCustomTemplates() {
-      migrateLegacyLibrary();
       try {
         const raw = localStorage.getItem(CUSTOM_LIBRARY_KEY);
         if (!raw) {
@@ -1524,6 +2088,19 @@
       return getScannerBaseUrl() + '?tpl=' + encodeURIComponent(String(template).trim());
     }
 
+    async function copyTextToClipboard(text, successMessage) {
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast(successMessage);
+      } catch {
+        window.prompt('Copy this text:', text);
+      }
+    }
+
+    async function copyScannedBarcodePlaceholder() {
+      await copyTextToClipboard(SCANNED_BARCODE_PLACEHOLDER, 'Copied {scannedBarcode}');
+    }
+
     async function copyShareLink() {
       const template = tplIn.value.trim();
       if (!template) {
@@ -1531,13 +2108,7 @@
         tplIn.focus();
         return;
       }
-      const link = buildShareLink(template);
-      try {
-        await navigator.clipboard.writeText(link);
-        showToast('Template share link copied');
-      } catch {
-        window.prompt('Copy this template share link:', link);
-      }
+      await copyTextToClipboard(buildShareLink(template), 'Template share link copied');
     }
 
     function saveCfg() {
@@ -1559,7 +2130,13 @@
       }
 
       const targetUrl = buildTargetUrl(code, templateUrl);
-      const tab = window.open(targetUrl, '_blank');
+      if (!targetUrl) {
+        showToast('Invalid template URL');
+        setStatus('error', 'Invalid template URL');
+        return false;
+      }
+
+      const tab = opts.tab || window.open(targetUrl, '_blank');
       if (!tab) {
         showToast('Popup blocked — allow popups for this site');
         setStatus('error', 'Could not open new tab');
@@ -1575,7 +2152,7 @@
           toastMessage: 'Template saved for future scans'
         });
       }
-      setStatus('scanning', 'Opened in new tab: ' + code);
+      setStatus('idle', 'Opened in new tab: ' + code);
       showToast('Opened in new tab');
       return true;
     }
@@ -1626,10 +2203,13 @@
       pickTemplateModal.hidden = true;
       pendingScanCode = '';
       selectedPickTemplate = null;
-      if (!templatesModal.classList.contains('open') && !historyModal.classList.contains('open')) {
+      handlingScan = false;
+      if (!templatesModal.classList.contains('open') &&
+          !historyModal.classList.contains('open') &&
+          !scanErrorModal.classList.contains('open')) {
         document.body.classList.remove('modal-open');
       }
-      setStatus('scanning', 'Ready — point camera at barcode');
+      setStatus('idle', 'Scanner stopped — tap Start Scanning to scan again');
     }
 
     function confirmPickTemplate() {
@@ -1637,15 +2217,30 @@
         showToast('Select a template first');
         return;
       }
-      const saveAsTemplate = pickSaveAsTemplate.checked;
-      const templateUrl = selectedPickTemplate.url;
       const code = pendingScanCode;
-      closePickTemplateModal();
+      const templateUrl = selectedPickTemplate.url;
+      const saveAsTemplate = pickSaveAsTemplate.checked;
+      const templateName = selectedPickTemplate.name;
+      const targetUrl = buildTargetUrl(code, templateUrl);
+      if (!targetUrl) {
+        showToast('Invalid template URL');
+        return;
+      }
+
+      const tab = window.open(targetUrl, '_blank');
+      if (!tab) {
+        showToast('Popup blocked — allow popups for this site');
+        setStatus('error', 'Could not open new tab');
+        return;
+      }
+
       openUrlInNewTab(code, templateUrl, {
         saveAsTemplate,
-        templateName: selectedPickTemplate.name,
-        skipCooldown: true
+        templateName,
+        skipCooldown: true,
+        tab
       });
+      closePickTemplateModal();
     }
 
     function openInNewTab(code) {
@@ -1655,18 +2250,24 @@
         return;
       }
       openUrlInNewTab(code, template, {});
+      handlingScan = false;
     }
 
     function onScanSuccess(txt) {
+      if (handlingScan) {
+        return;
+      }
       const code = String(txt || '').trim();
       if (!code) {
         return;
       }
+      handlingScan = true;
+      stopActiveScan();
       openInNewTab(code);
     }
 
-    function onScanFailure() {
-      /* Called every frame while searching — no UI noise. */
+    function onScanFailure(error, errorDetails) {
+      reportScanFailure(error, errorDetails);
     }
 
     tplIn.addEventListener('input', updatePreview);
@@ -1679,6 +2280,14 @@
         closeHistoryModal();
       }
     });
+    document.getElementById('closeScanErrorBtn').addEventListener('click', closeScanErrorModal);
+    document.getElementById('dismissScanErrorBtn').addEventListener('click', closeScanErrorModal);
+    scanErrorModal.addEventListener('click', (e) => {
+      if (e.target === scanErrorModal) {
+        closeScanErrorModal();
+      }
+    });
+
     document.getElementById('closePickTemplateBtn').addEventListener('click', closePickTemplateModal);
     document.getElementById('pickCancelBtn').addEventListener('click', closePickTemplateModal);
     document.getElementById('pickOpenBtn').addEventListener('click', confirmPickTemplate);
@@ -1711,7 +2320,9 @@
       if (e.key !== 'Escape') {
         return;
       }
-      if (pickTemplateModal.classList.contains('open')) {
+      if (scanErrorModal.classList.contains('open')) {
+        closeScanErrorModal();
+      } else if (pickTemplateModal.classList.contains('open')) {
         closePickTemplateModal();
       } else if (templatesModal.classList.contains('open')) {
         closeTemplatesModal();
@@ -1722,6 +2333,7 @@
 
     document.getElementById('saveBtn').addEventListener('click', saveCfg);
     document.getElementById('copyShareLinkBtn').addEventListener('click', copyShareLink);
+    document.getElementById('copyPlaceholderBtn').addEventListener('click', copyScannedBarcodePlaceholder);
     document.getElementById('testBtn').addEventListener('click', () => {
       if (confirm('Open a new tab with sample barcode ' + SAMPLE_CODE + '?')) {
         openInNewTab(SAMPLE_CODE);
@@ -1757,6 +2369,7 @@
         aspectRatio: 1.5
       });
       scanner.render(onScanSuccess, onScanFailure);
+      watchScannerUi();
       setStatus('scanning', 'Ready — point camera at barcode');
     }
   </script>
